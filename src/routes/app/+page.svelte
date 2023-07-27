@@ -12,7 +12,9 @@
 		<article class="text-center space-y-4">
 			<p class="h2">You don't have any recipes yet</p>
 			<p>Click the button below to create your first recipe</p>
-			<button class="btn variant-filled-primary">Create New Recipe<PlusIcon class="ml-2" /></button>
+			<a href="/app/create" class="btn variant-filled-primary"
+				>Create New Recipe<PlusIcon class="ml-2" /></a
+			>
 		</article>
 	{:else}
 		{#each recipes as recipe}
