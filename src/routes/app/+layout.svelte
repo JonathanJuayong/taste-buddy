@@ -18,6 +18,6 @@
 		>
 	</AppBar>
 	<div class="flex-grow py-6 px-4 grid">
-		<slot class="flex-grow py-6 px-4 grid" />
+		<slot />
 	</div>
 </main>
