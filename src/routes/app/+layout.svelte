@@ -17,7 +17,7 @@
 			><button class="btn btn-icon p-1"><BabyIcon /></button></svelte:fragment
 		>
 	</AppBar>
-	<div class="flex-grow py-6 px-4 grid">
+	<div class="flex-grow py-6 px-4">
 		<slot />
 	</div>
 </main>
