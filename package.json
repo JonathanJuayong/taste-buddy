@@ -36,6 +36,7 @@
 		"typescript": "^5.0.0",
 		"unplugin-icons": "^0.16.5",
 		"vite": "^4.3.0",
+		"vite-imagetools": "^5.0.5",
 		"zod": "^3.21.4"
 	},
 	"type": "module",
