@@ -41,6 +41,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"postgres": "^3.3.5"
+		"postgres": "^3.3.5",
+		"svelte-cloudinary": "^1.0.3"
 	}
 }
