@@ -22,3 +22,9 @@
 		{/each}
 	{/if}
 </div>
+<a
+	href="/app/create"
+	class="btn aspect-square rounded-full variant-filled-primary fixed bottom-8 right-8"
+>
+	<PlusIcon />
+</a>
