@@ -7,8 +7,10 @@ export const ingredient = z.object({
 });
 
 export const mainSchema = z.object({
+	id: z.string(),
 	name: z.string(),
 	description: z.string(),
+	imageSrc: z.string(),
 	serves: z.number(),
 	cookTime: z.number(),
 	prepTime: z.number(),
