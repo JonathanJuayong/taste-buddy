@@ -3,7 +3,7 @@
 	import { CldImage } from 'svelte-cloudinary';
 
 	export let recipe: RecipeCard;
-	const { name, src, id } = recipe;
+	const { name, imageSrc: src, id } = recipe;
 	const effects = [{ opacity: 50 }, { blur: '500' }];
 </script>
 
