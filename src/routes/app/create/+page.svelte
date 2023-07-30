@@ -5,11 +5,15 @@
 	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import XIcon from '~icons/lucide/x';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 
 	const formData = superForm(data.form, {
-		dataType: 'json'
+		dataType: 'json',
+		onResult: async () => {
+			await goto('/app');
+		}
 	});
 	const { form, errors, constraints, enhance } = formData;
 
