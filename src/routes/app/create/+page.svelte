@@ -5,6 +5,4 @@
 	export let data: PageData;
 </script>
 
-<!-- <SuperDebug data={$form} /> -->
-
 <RecipeForm formProp={data.form} />
