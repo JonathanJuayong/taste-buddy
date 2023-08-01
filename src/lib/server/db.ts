@@ -41,6 +41,24 @@ const initialData: MainSchema[] = [
 db.set('data', initialData);
 
 export const getRecipes = () => db.get('data');
+export const getRecipeById = (id: string) => {
+	const recipes = getRecipes() ?? [];
+	return recipes.find((recipe) => recipe.id === id);
+};
+export const updateRecipe = (id: string, updatedRecipe: MainSchema) => {
+	const recipes = getRecipes();
+	if (!recipes) return undefined;
+
+	const newRecipes = recipes.map((recipe) => {
+		if (recipe.id === id) {
+			return { ...recipe, ...updatedRecipe };
+		} else {
+			return recipe;
+		}
+	});
+	db.set('data', newRecipes);
+	return updatedRecipe;
+};
 export const addRecipe = (recipe: MainSchema) => {
 	const recipes = getRecipes() ?? [];
 	db.set('data', [...recipes, recipe]);
