@@ -64,3 +64,9 @@ export const addRecipe = (recipe: MainSchema) => {
 	db.set('data', [...recipes, recipe]);
 	return recipe;
 };
+export const deleteRecipe = (id: string) => {
+	const recipes = getRecipes() ?? [];
+	const filteredRecipes = recipes.filter((recipe) => recipe.id !== id);
+	db.set('data', [...filteredRecipes]);
+	return id;
+};
