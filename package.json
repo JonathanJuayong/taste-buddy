@@ -41,6 +41,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"firebase": "^10.1.0",
+		"firebase-admin": "^11.10.1",
 		"postgres": "^3.3.5",
 		"svelte-cloudinary": "^1.0.3"
 	}
