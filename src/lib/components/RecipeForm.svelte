@@ -4,17 +4,21 @@
 	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import XIcon from '~icons/lucide/x';
-	import { goto } from '$app/navigation';
 	import type { mainSchema } from '$lib/formSchema';
 	import type { SuperValidated } from 'sveltekit-superforms';
+	import type { ActionResult } from '@sveltejs/kit';
 
 	export let formProp: SuperValidated<typeof mainSchema>;
+	export let actionUrl: string;
+	export let onResult: (event: {
+		result: ActionResult;
+		formEl: HTMLFormElement;
+		cancel: () => void;
+	}) => void;
 
 	const formData = superForm(formProp, {
 		dataType: 'json',
-		onResult: async () => {
-			await goto('/app');
-		}
+		onResult
 	});
 	const { form, errors, constraints, enhance } = formData;
 
@@ -62,7 +66,7 @@
 
 <!-- <SuperDebug data={$form} /> -->
 
-<form method="POST" class="grid gap-2" use:enhance>
+<form method="POST" action={actionUrl} class="grid gap-2" use:enhance>
 	<TabGroup class="mb-8" justify="justify-between">
 		{#each tabs as { name, label }, i}
 			<Tab bind:group={activeTab} {name} value={i}>{label}</Tab>
