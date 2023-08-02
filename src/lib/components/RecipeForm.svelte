@@ -66,7 +66,7 @@
 
 <!-- <SuperDebug data={$form} /> -->
 
-<form method="POST" action={actionUrl} class="grid gap-2" use:enhance>
+<form method="POST" action={actionUrl} class="grid" use:enhance>
 	<TabGroup class="mb-8" justify="justify-between">
 		{#each tabs as { name, label }, i}
 			<Tab bind:group={activeTab} {name} value={i}>{label}</Tab>
@@ -154,7 +154,7 @@
 					</div>
 				{/each}
 				<button
-					class="btn variant-outline-primary mt-6 w-full"
+					class="btn variant-outline-primary mt-8 w-full"
 					type="button"
 					on:click={addIngredient}
 				>
@@ -178,7 +178,7 @@
 						{/if}
 					</div>
 				{/each}
-				<button class="btn variant-outline-primary mt-6 w-full" type="button" on:click={addStep}>
+				<button class="btn variant-outline-primary mt-8 w-full" type="button" on:click={addStep}>
 					Add
 				</button>
 			{:else if activeTab === 3}
@@ -204,7 +204,7 @@
 			{/if}
 		</svelte:fragment>
 	</TabGroup>
-	<div class="grid grid-cols-2 gap-6">
+	<div class="grid grid-cols-2 gap-6 border-t-[1px] border-surface-500 pt-8">
 		<button
 			disabled={activeTab === 0}
 			class="btn variant-filled-tertiary"
