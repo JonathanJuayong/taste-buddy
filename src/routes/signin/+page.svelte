@@ -6,7 +6,7 @@
 	import { goto } from '$app/navigation';
 
 	export let data: PageData;
-	$: uid = data.user.uid;
+	const uid = data.user.uid;
 
 	function signInWith(provider: AuthProvider) {
 		return async () => {
@@ -35,7 +35,6 @@
 </script>
 
 <div class="p-6 space-y-6">
-	<p>{uid}</p>
 	{#if uid}
 		<button class="btn variant-filled-error w-full" on:click={logOut}>Sign Out</button>
 	{:else}
