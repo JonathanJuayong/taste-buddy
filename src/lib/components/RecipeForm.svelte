@@ -91,9 +91,9 @@
 					name="imageSrc"
 					label="Image url"
 					type="text"
-					error={$errors.imageSrc}
-					bind:value={$form.imageSrc}
-					{...$constraints.imageSrc}
+					error={$errors.image_src}
+					bind:value={$form.image_src}
+					{...$constraints.image_src}
 				/>
 				<div class="grid grid-cols-3 gap-4">
 					<LabeledInput
@@ -107,17 +107,17 @@
 						name="cookTime"
 						label="cook time"
 						type="number"
-						error={$errors.cookTime}
-						bind:value={$form.cookTime}
-						{...$constraints.cookTime}
+						error={$errors.cook_time}
+						bind:value={$form.cook_time}
+						{...$constraints.cook_time}
 					/>
 					<LabeledInput
 						name="prepTime"
 						label="prep time"
 						type="number"
-						error={$errors.prepTime}
-						bind:value={$form.prepTime}
-						{...$constraints.prepTime}
+						error={$errors.prep_time}
+						bind:value={$form.prep_time}
+						{...$constraints.prep_time}
 					/>
 				</div>
 			{:else if activeTab === 1}
