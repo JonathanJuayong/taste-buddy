@@ -4,12 +4,21 @@ import type { PageServerLoad } from './$types';
 import { mainSchema } from '$lib/formSchema';
 import { redirect } from '@sveltejs/kit';
 
-export const load = (async ({ params }) => {
+export const load = (async ({ params, locals }) => {
 	const { id } = params;
-	const recipe = getRecipeById(id);
+
+	// avoid isNan errors by coercing id into number
+	const typeCheckedId = isNaN(Number(id)) ? -1 : Number(id);
+	const recipe = await getRecipeById(typeCheckedId);
+
 	if (recipe) {
 		const form = await superValidate(recipe, mainSchema);
-		return { form, recipe, editable: true };
+		return {
+			form,
+			recipe,
+			// if user uid is the same as author_id, allow edit
+			editable: locals.user.uid === recipe.author_id
+		};
 	}
 	return { recipe };
 }) satisfies PageServerLoad;
@@ -18,11 +27,11 @@ export const actions = {
 	update: async ({ request }) => {
 		const form = await superValidate(request, mainSchema);
 		const newRecipe = form.data;
-		updateRecipe(newRecipe.id, newRecipe);
+		updateRecipe(Number(newRecipe.id), newRecipe);
 	},
 	delete: async ({ params }) => {
 		const { id } = params;
-		deleteRecipe(id);
+		deleteRecipe(Number(id));
 		throw redirect(301, '/app');
 	}
 };
