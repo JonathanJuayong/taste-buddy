@@ -1,5 +1,6 @@
 import { mainSchema } from '$lib/formSchema';
 import { addRecipe } from '$lib/server/db';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
 
@@ -9,14 +10,16 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ request, locals }) => {
+		const {
+			user: { uid }
+		} = locals;
+
+		if (!uid) throw error(400, 'Cannot create recipe without author');
+
 		const form = await superValidate(request, mainSchema);
 
-		const id = crypto.randomUUID() as string;
-		console.log({ recipe: form.data });
-		const createdRecipe = addRecipe({ ...form.data, id });
-
-		console.log('recipe created', createdRecipe);
+		await addRecipe(form.data, uid);
 
 		return { form };
 	}
