@@ -3,7 +3,6 @@
 	import { page } from '$app/stores';
 	import RecipeForm from '$lib/components/RecipeForm.svelte';
 	import { CldImage } from 'svelte-cloudinary';
-	import XIcon from '~icons/lucide/x';
 
 	export let data: PageData;
 	const { form, editable } = data;
@@ -35,14 +34,14 @@
 					width="1000"
 					alt={recipe.name}
 					aspectRatio={1.0}
-					src={recipe.imageSrc}
+					src={recipe.image_src}
 				/>
 				<h2 class="h1 pb-2">{recipe.name}</h2>
 				<p>{recipe.description}</p>
 				<ul class="flex gap-4 text-xs">
 					<li class="border-r-[1px] pr-4">Serves: {recipe.serves}</li>
-					<li class="border-r-[1px] pr-4">Cook: {recipe.cookTime} mins</li>
-					<li>Prep: {recipe.prepTime} mins</li>
+					<li class="border-r-[1px] pr-4">Cook: {recipe.cook_time} mins</li>
+					<li>Prep: {recipe.prep_time} mins</li>
 				</ul>
 			</section>
 			<section>
