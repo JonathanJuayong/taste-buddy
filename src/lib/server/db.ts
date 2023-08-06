@@ -1,72 +1,101 @@
 import type { MainSchema } from '$lib/formSchema';
+import postgres from 'postgres';
+import { PG_DATABASE, PG_HOST, PG_PASSWORD, PG_USERNAME } from '$env/static/private';
+import type { User } from '$lib/types';
 
-const db = new Map<string, MainSchema[]>();
-
-const initialData: MainSchema[] = [
-	// {
-	// 	id: '1',
-	// 	name: 'Shoyu Ramen',
-	// 	description: '',
-	// 	cookTime: 5,
-	// 	prepTime: 10,
-	// 	serves: 2,
-	// 	ingredients: [],
-	// 	steps: [],
-	// 	imageSrc: 'recipe/ramen_bpgd2w'
-	// },
-	// {
-	// 	id: '2',
-	// 	name: 'Gua Bao',
-	// 	description: '',
-	// 	cookTime: 5,
-	// 	prepTime: 10,
-	// 	serves: 2,
-	// 	ingredients: [],
-	// 	steps: [],
-	// 	imageSrc: 'recipe/bao_i3lzki'
-	// },
-	// {
-	// 	id: '3',
-	// 	name: 'Fried Rice',
-	// 	description: '',
-	// 	cookTime: 5,
-	// 	prepTime: 10,
-	// 	serves: 2,
-	// 	ingredients: [],
-	// 	steps: [],
-	// 	imageSrc: 'recipe/rice_xnmqdq'
-	// }
-];
-
-db.set('data', initialData);
-
-export const getRecipes = () => db.get('data');
-export const getRecipeById = (id: string) => {
-	const recipes = getRecipes() ?? [];
-	return recipes.find((recipe) => recipe.id === id);
+export type Ingredient = {
+	qty: number;
+	unit: string;
+	item: string;
 };
-export const updateRecipe = (id: string, updatedRecipe: MainSchema) => {
-	const recipes = getRecipes();
-	if (!recipes) return undefined;
 
-	const newRecipes = recipes.map((recipe) => {
-		if (recipe.id === id) {
-			return { ...recipe, ...updatedRecipe };
-		} else {
-			return recipe;
-		}
+const sql = postgres({
+	username: PG_USERNAME,
+	password: PG_PASSWORD,
+	host: PG_HOST,
+	port: 5432,
+	database: PG_DATABASE
+});
+
+type RecipeSQLReturnType = Omit<MainSchema, 'ingredients'> & {
+	ingredients: string[];
+	author_id: string;
+};
+
+export const getUserById = async (id: string) => {
+	const results = await sql<User[]>`SELECT * FROM user_ WHERE id = ${id}`;
+	if (results.length === 0) return null;
+	return results[0];
+};
+
+export const getAllUsers = async () => await sql`SELECT * FROM user_;`;
+
+export const createUser = async (id: string) => await sql`INSERT INTO user_ (id) VALUES (${id})`;
+
+export const getRecipesByUser = async (id: string) =>
+	await sql<MainSchema[]>`SELECT * FROM recipe_ WHERE author_id = ${id}`;
+
+export const getRecipeById = async (
+	id: number
+): Promise<(MainSchema & { author_id: string }) | null> => {
+	const result = await sql<RecipeSQLReturnType[]>`SELECT * FROM recipe_ WHERE id = ${id};`;
+
+	if (result.length === 0) return null;
+
+	const recipe = result[0];
+	const ingredients = recipe.ingredients.map((ingredient) => {
+		// ingredient is formatted as following: "qty;unit;item"
+		const [qty, unit, item] = ingredient.split(';');
+		return { qty: Number(qty), unit, item };
 	});
-	db.set('data', newRecipes);
-	return updatedRecipe;
+	return { ...recipe, ingredients };
 };
-export const addRecipe = (recipe: MainSchema) => {
-	const recipes = getRecipes() ?? [];
-	db.set('data', [...recipes, recipe]);
-	return recipe;
+
+export const updateRecipe = async (id: number, updatedRecipe: MainSchema) => {
+	const { name, description, image_src, serves, cook_time, prep_time, ingredients, steps } =
+		updatedRecipe;
+	const ingredients_ = ingredients.map(({ qty, unit, item }) => `${qty};${unit};${item}`);
+
+	await sql`UPDATE recipe_ SET
+    name=${name},
+    description=${description},
+    image_src=${image_src},
+    serves=${serves},
+    cook_time=${cook_time},
+    prep_time=${prep_time},
+    ingredients=${ingredients_},
+    steps=${steps}
+    WHERE id=${id}
+  `;
 };
-export const deleteRecipe = (id: string) => {
-	const recipes = getRecipes() ?? [];
-	const filteredRecipes = recipes.filter((recipe) => recipe.id !== id);
-	db.set('data', [...filteredRecipes]);
-	return id;
+
+export const addRecipe = async (recipe: MainSchema, author_id: string) => {
+	const { name, description, image_src, serves, cook_time, prep_time, ingredients, steps } = recipe;
+	const ingredients_ = ingredients.map(({ qty, unit, item }) => `${qty};${unit};${item}`);
+
+	await sql`INSERT INTO recipe_ (
+    name,
+    description,
+    image_src,
+    serves,
+    cook_time,
+    prep_time,
+    ingredients,
+    steps,
+    author_id
+  ) VALUES (
+    ${name},
+    ${description},
+    ${image_src},
+    ${serves},
+    ${cook_time},
+    ${prep_time},
+    ${ingredients_},
+    ${steps},
+    ${author_id}
+  )`;
+};
+
+export const deleteRecipe = async (id: number) => {
+	await sql`DELETE FROM recipe_ WHERE id=${id}`;
 };
