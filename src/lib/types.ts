@@ -1,5 +1,9 @@
 export type RecipeCard = {
-	id: string;
+	id: number;
 	name: string;
-	imageSrc: string;
+	image_src: string;
+};
+
+export type User = {
+	id: string;
 };

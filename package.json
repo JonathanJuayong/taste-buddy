@@ -13,6 +13,7 @@
 	},
 	"devDependencies": {
 		"@floating-ui/dom": "^1.4.5",
+		"@iconify-json/devicon-plain": "^1.1.13",
 		"@iconify-json/lucide": "^1.1.112",
 		"@skeletonlabs/skeleton": "^1.10.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
@@ -41,6 +42,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"firebase": "^10.1.0",
+		"firebase-admin": "^11.10.1",
 		"postgres": "^3.3.5",
 		"svelte-cloudinary": "^1.0.3"
 	}

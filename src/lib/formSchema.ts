@@ -7,13 +7,13 @@ export const ingredient = z.object({
 });
 
 export const mainSchema = z.object({
-	id: z.string(),
+	id: z.number(),
 	name: z.string(),
 	description: z.string(),
-	imageSrc: z.string(),
+	image_src: z.string(),
 	serves: z.number(),
-	cookTime: z.number(),
-	prepTime: z.number(),
+	cook_time: z.number(),
+	prep_time: z.number(),
 	ingredients: ingredient.array().default([{ item: '', qty: 1, unit: '' }]),
 	steps: z.string().array().default([''])
 });
