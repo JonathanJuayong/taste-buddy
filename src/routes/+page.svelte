@@ -1,4 +1,12 @@
-<div class="flex gap-5 justify-center py-10">
-	<a class="btn variant-filled-primary" href="/signin">Sign In</a>
-	<a class="btn variant-filled-primary" href="/app">Go to App</a>
-</div>
+<script lang="ts">
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+
+	const href = data.user.uid ? '/app' : '/signin';
+	const linkText = data.user.uid ? 'Go to App' : 'Sign In';
+</script>
+
+<main class="p-6">
+	<a class="btn variant-filled-primary w-full" {href}>{linkText}</a>
+</main>
