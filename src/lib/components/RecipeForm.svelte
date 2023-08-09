@@ -88,14 +88,6 @@
 					bind:value={$form.description}
 					{...$constraints.description}
 				/>
-				<!-- <LabeledInput
-					name="imageSrc"
-					label="Image url"
-					type="text"
-					error={$errors.image_src}
-					bind:value={$form.image_src}
-					{...$constraints.image_src}
-				/> -->
 				<div class="grid grid-cols-3 gap-4">
 					<LabeledInput
 						name="serves"
