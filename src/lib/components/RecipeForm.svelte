@@ -7,6 +7,7 @@
 	import type { mainSchema } from '$lib/formSchema';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { ActionResult } from '@sveltejs/kit';
+	import UploadWidget from './UploadWidget.svelte';
 
 	export let formProp: SuperValidated<typeof mainSchema>;
 	export let actionUrl: string;
@@ -87,14 +88,14 @@
 					bind:value={$form.description}
 					{...$constraints.description}
 				/>
-				<LabeledInput
+				<!-- <LabeledInput
 					name="imageSrc"
 					label="Image url"
 					type="text"
 					error={$errors.image_src}
 					bind:value={$form.image_src}
 					{...$constraints.image_src}
-				/>
+				/> -->
 				<div class="grid grid-cols-3 gap-4">
 					<LabeledInput
 						name="serves"
@@ -120,6 +121,12 @@
 						{...$constraints.prep_time}
 					/>
 				</div>
+				<UploadWidget
+					imageSrc={$form.image_src}
+					on:upload={(e) => {
+						$form.image_src = e.detail;
+					}}
+				/>
 			{:else if activeTab === 1}
 				{#each $form.ingredients as _, i}
 					<div class="grid grid-cols-4 gap-6 relative" use:focus={i}>
