@@ -3,6 +3,10 @@ import postgres from 'postgres';
 import { PG_DATABASE, PG_HOST, PG_PASSWORD, PG_USERNAME } from '$env/static/private';
 import type { User } from '$lib/types';
 
+function generateRandomId() {
+	return Math.random().toString(36).substring(2, 7);
+}
+
 export type Ingredient = {
 	qty: number;
 	unit: string;
@@ -17,8 +21,9 @@ const sql = postgres({
 	database: PG_DATABASE
 });
 
-type RecipeSQLReturnType = Omit<MainSchema, 'ingredients'> & {
+type RecipeSQLReturnType = Omit<MainSchema, 'ingredients' | 'steps'> & {
 	ingredients: string[];
+	steps: string[];
 	author_id: string;
 };
 
@@ -48,7 +53,8 @@ export const getRecipeById = async (
 		const [qty, unit, item] = ingredient.split(';');
 		return { qty: Number(qty), unit, item };
 	});
-	return { ...recipe, ingredients };
+	const steps = recipe.steps.map((step) => ({ id: generateRandomId(), step }));
+	return { ...recipe, ingredients, steps };
 };
 
 export const updateRecipe = async (id: number, updatedRecipe: MainSchema) => {
@@ -64,7 +70,7 @@ export const updateRecipe = async (id: number, updatedRecipe: MainSchema) => {
     cook_time=${cook_time},
     prep_time=${prep_time},
     ingredients=${ingredients_},
-    steps=${steps}
+    steps=${steps.map(({ step }) => step)}
     WHERE id=${id}
   `;
 };
@@ -91,7 +97,7 @@ export const addRecipe = async (recipe: MainSchema, author_id: string) => {
     ${cook_time},
     ${prep_time},
     ${ingredients_},
-    ${steps},
+    ${steps.map(({ step }) => step)},
     ${author_id}
   )`;
 };

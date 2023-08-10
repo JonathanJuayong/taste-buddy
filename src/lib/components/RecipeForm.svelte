@@ -23,6 +23,10 @@
 	});
 	const { form, errors, constraints, enhance } = formData;
 
+	function generateRandomId() {
+		return Math.random().toString(36).substring(2, 7);
+	}
+
 	function addIngredient() {
 		$form.ingredients = [...$form.ingredients, { item: '', qty: 1, unit: '' }];
 	}
@@ -32,7 +36,7 @@
 		};
 	}
 	function addStep() {
-		$form.steps = [...$form.steps, ''];
+		$form.steps = [...$form.steps, { id: generateRandomId(), step: '' }];
 	}
 	function removeStep(index: number) {
 		return () => ($form.steps = $form.steps.filter((_, i) => i !== index));
@@ -160,14 +164,14 @@
 					Add
 				</button>
 			{:else if activeTab === 2}
-				{#each $form.steps as _, i}
+				{#each $form.steps as { id }, i (id)}
 					<div class="grid gap-6 relative" use:focus={i}>
 						<LabeledInput
 							name="steps"
 							label={`Step #${i + 1}`}
 							type="text"
-							error={$errors.steps?.[i]}
-							bind:value={$form.steps[i]}
+							error={$errors.steps?.[i].step}
+							bind:value={$form.steps[i].step}
 							{...$constraints.steps}
 						/>
 						{#if deleteStepBtnIsShown}
@@ -195,7 +199,7 @@
 				<section>
 					<h3 class="h3">Steps</h3>
 					<ol>
-						{#each $form.steps as step, i}
+						{#each $form.steps as { step }, i}
 							<li>{i + 1}. {step}</li>
 						{/each}
 					</ol>

@@ -56,7 +56,7 @@
 			<section>
 				<h3 class="h3">Steps:</h3>
 				<ol>
-					{#each recipe.steps as step, i}
+					{#each recipe.steps as { step }, i}
 						<li>{i + 1}. {step}</li>
 					{/each}
 				</ol>

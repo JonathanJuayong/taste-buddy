@@ -6,6 +6,11 @@ export const ingredient = z.object({
 	item: z.string()
 });
 
+export const step = z.object({
+	id: z.string(),
+	step: z.string()
+});
+
 export const mainSchema = z.object({
 	id: z.number(),
 	name: z.string(),
@@ -15,7 +20,7 @@ export const mainSchema = z.object({
 	cook_time: z.number(),
 	prep_time: z.number(),
 	ingredients: ingredient.array().default([{ item: '', qty: 1, unit: '' }]),
-	steps: z.string().array().default([''])
+	steps: step.array().default([{ id: 'default', step: '' }])
 });
 
 export type MainSchema = z.infer<typeof mainSchema>;
