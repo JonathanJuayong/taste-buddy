@@ -43,6 +43,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@neodrag/svelte": "^2.0.3",
 		"firebase": "^10.1.0",
 		"firebase-admin": "^11.10.1",
 		"postgres": "^3.3.5",
