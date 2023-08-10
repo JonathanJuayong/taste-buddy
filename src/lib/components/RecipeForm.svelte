@@ -8,6 +8,8 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { ActionResult } from '@sveltejs/kit';
 	import UploadWidget from './UploadWidget.svelte';
+	import { flip } from 'svelte/animate';
+	import { draggable } from '@neodrag/svelte';
 
 	export let formProp: SuperValidated<typeof mainSchema>;
 	export let actionUrl: string;
@@ -16,6 +18,11 @@
 		formEl: HTMLFormElement;
 		cancel: () => void;
 	}) => void;
+
+	const defaultPosition = { x: 0, y: 0 };
+	const threshold = 80;
+	let position = defaultPosition;
+	let activeIndex: number | null = null;
 
 	const formData = superForm(formProp, {
 		dataType: 'json',
@@ -26,7 +33,6 @@
 	function generateRandomId() {
 		return Math.random().toString(36).substring(2, 7);
 	}
-
 	function addIngredient() {
 		$form.ingredients = [...$form.ingredients, { item: '', qty: 1, unit: '' }];
 	}
@@ -46,6 +52,25 @@
 
 		const el = Array.from(element.children)[0] as HTMLElement;
 		el.focus();
+	}
+	function moveItemTo<T>(arr: Array<T>, fromIndex: number, toIndex: number) {
+		const fromIsSameAsToIndex = fromIndex === toIndex;
+		const fromIndexIsInvalid = fromIndex < 0 || fromIndex >= arr.length;
+
+		if (fromIsSameAsToIndex || fromIndexIsInvalid) return arr;
+
+		const item = arr[fromIndex];
+		const modifiedArray = arr.filter((_, i) => i !== fromIndex);
+
+		if (toIndex >= arr.length) {
+			return [...modifiedArray, item];
+		}
+
+		if (toIndex <= 0) {
+			return [item, ...modifiedArray];
+		}
+
+		return [...modifiedArray.slice(0, toIndex), item, ...modifiedArray.slice(toIndex)];
 	}
 
 	let activeTab = 0;
@@ -165,7 +190,33 @@
 				</button>
 			{:else if activeTab === 2}
 				{#each $form.steps as { id }, i (id)}
-					<div class="grid gap-6 relative" use:focus={i}>
+					<div
+						class="grid gap-6 relative"
+						class:z-10={i === activeIndex}
+						use:focus={i}
+						animate:flip={{ duration: 100 }}
+						use:draggable={{
+							bounds: { left: 20, right: 20 },
+							// handle: '.handle',
+							position,
+							onDragStart: () => {
+								activeIndex = i;
+							},
+							onDragEnd: ({ offsetY }) => {
+								activeIndex = null;
+								position = defaultPosition;
+								const absoluteY = Math.abs(offsetY);
+								if (absoluteY < threshold) return;
+								const indexOffset = Math.floor(absoluteY / threshold);
+
+								if (offsetY > 0) {
+									$form.steps = moveItemTo($form.steps, i, i + indexOffset);
+								} else {
+									$form.steps = moveItemTo($form.steps, i, i - indexOffset);
+								}
+							}
+						}}
+					>
 						<LabeledInput
 							name="steps"
 							label={`Step #${i + 1}`}
@@ -185,10 +236,16 @@
 					Add
 				</button>
 			{:else if activeTab === 3}
-				<h2 class="h2 mb-2">{$form.name}</h2>
-				<p class="mb-6">{$form.description}</p>
-
-				<section>
+				<div class="mb-6">
+					<h2 class="h2 mb-2">{$form.name}</h2>
+					<p>{$form.description}</p>
+					<ul class="flex gap-4 text-xs">
+						<li class="border-r-[1px] pr-4">Serves: {$form.serves}</li>
+						<li class="border-r-[1px] pr-4">Cook: {$form.cook_time} mins</li>
+						<li>Prep: {$form.prep_time} mins</li>
+					</ul>
+				</div>
+				<section class="mb-6">
 					<h3 class="h3">Ingredients</h3>
 					<ul>
 						{#each $form.ingredients as { qty, unit, item }}
