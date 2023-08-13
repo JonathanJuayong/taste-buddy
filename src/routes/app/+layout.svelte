@@ -69,7 +69,7 @@
 					<p>Create</p>
 				</li>
 			{/if}
-			{#if $page.url.pathname.includes('/recipe')}
+			{#if $page.url.pathname.includes('/edit')}
 				<li class="crumb-separator">
 					{'>'}
 				</li>
