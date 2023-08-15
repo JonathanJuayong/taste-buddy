@@ -7,6 +7,9 @@
 </script>
 
 {#if recipe}
+	<head>
+		<title>{recipe.name}</title>
+	</head>
 	<article class="grid gap-6">
 		<section>
 			<CldImage
@@ -47,5 +50,10 @@
 		{/if}
 	</article>
 {:else}
-	<h2>Oops... We couldn't find that recipe</h2>
+	<head>
+		<title>Recipe does not exist</title>
+	</head>
+	<article class="">
+		<h2>Oops... We couldn't find that recipe</h2>
+	</article>
 {/if}
