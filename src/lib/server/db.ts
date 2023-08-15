@@ -33,6 +33,15 @@ export const getUserById = async (id: string) => {
 	return results[0];
 };
 
+export const getRecipesPaginated = async (resultsPerPage: number, lastSeenId: number) => {
+	return await sql<MainSchema[]>`
+    SELECT * FROM recipe_
+      WHERE id > ${lastSeenId}
+      ORDER BY id
+      LIMIT ${resultsPerPage}
+  `;
+};
+
 export const getAllUsers = async () => await sql`SELECT * FROM user_;`;
 
 export const createUser = async (id: string) => await sql`INSERT INTO user_ (id) VALUES (${id})`;
