@@ -3,12 +3,11 @@
 	import { page } from '$app/stores';
 	import RecipeForm from '$lib/components/RecipeForm.svelte';
 	import { CldImage } from 'svelte-cloudinary';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 	const { form, editable } = data;
 	$: recipe = data.recipe;
-
-	let editMode = false;
 </script>
 
 <title>{recipe?.name ?? 'Recipe not found'}</title>
@@ -18,11 +17,12 @@
 		<RecipeForm
 			actionUrl="{$page.url.pathname}?/update"
 			formProp={form}
-			onResult={() => (editMode = false)}
+			onResult={async () => await goto('/app')}
 		/>
-		<a href="/app" class="btn variant-outline-tertiary" on:click={() => (editMode = false)}>
-			Cancel Edit
-		</a>
+		<form method="POST" action="{$page.url.pathname}?/delete">
+			<button class="btn variant-outline-error w-full">Delete Recipe</button>
+		</form>
+		<a href="/app" class="btn variant-outline-tertiary"> Cancel Edit </a>
 	</article>
 {:else if !recipe}
 	<h2>Oops... We couldn't find that recipe.</h2>
