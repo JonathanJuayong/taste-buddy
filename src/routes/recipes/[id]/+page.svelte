@@ -10,8 +10,8 @@
 	<head>
 		<title>{recipe.name}</title>
 	</head>
-	<article class="grid gap-6">
-		<section>
+	<article class="grid gap-12">
+		<section class="grid gap-4">
 			<CldImage
 				class="mb-4"
 				height=""
@@ -28,7 +28,7 @@
 				<li>Prep: {recipe.prep_time} mins</li>
 			</ul>
 		</section>
-		<section>
+		<section class="grid gap-4">
 			<h3 class="h3">Ingredients:</h3>
 			<ul>
 				{#each recipe.ingredients as { qty, unit, item }}
@@ -37,7 +37,7 @@
 			</ul>
 		</section>
 
-		<section>
+		<section class="grid gap-4">
 			<h3 class="h3">Steps:</h3>
 			<ol>
 				{#each recipe.steps as { step }, i}
