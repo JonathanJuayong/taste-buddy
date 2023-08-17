@@ -2,8 +2,8 @@
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
 	import RecipeForm from '$lib/components/RecipeForm.svelte';
-	import { CldImage } from 'svelte-cloudinary';
 	import { goto } from '$app/navigation';
+	import { recipes } from '../../../../stores/recipes';
 
 	export let data: PageData;
 	const { form, editable } = data;
@@ -20,7 +20,12 @@
 			onResult={async () => await goto('/app')}
 		/>
 		<form method="POST" action="{$page.url.pathname}?/delete">
-			<button class="btn variant-outline-error w-full">Delete Recipe</button>
+			<button
+				class="btn variant-outline-error w-full"
+				on:click={() => {
+					$recipes = $recipes.filter(({ id }) => data?.recipe?.id !== id);
+				}}>Delete Recipe</button
+			>
 		</form>
 		<a href="/app" class="btn variant-outline-tertiary"> Cancel Edit </a>
 	</article>
