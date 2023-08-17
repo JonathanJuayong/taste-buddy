@@ -36,9 +36,9 @@ export const getUserById = async (id: string) => {
 export const getRecipesPaginated = async (resultsPerPage: number, lastSeenId: number) => {
 	return await sql<MainSchema[]>`
     SELECT * FROM recipe_
-      WHERE id > ${lastSeenId}
-      ORDER BY id
-      LIMIT ${resultsPerPage}
+      WHERE id < ${lastSeenId}
+      ORDER BY id DESC
+      FETCH FIRST ${resultsPerPage} ROWS ONLY
   `;
 };
 

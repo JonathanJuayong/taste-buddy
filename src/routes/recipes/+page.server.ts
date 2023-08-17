@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 const resultsPerPage = 5;
 
 export const load = (async () => {
-	const initialId = 0;
+	const initialId = 1_000_000;
 
 	// try to look 1 row ahead to check if data returned is the last batch of data,
 	// hence the + 1 on resultsPerPage
