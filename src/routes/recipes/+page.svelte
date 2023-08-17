@@ -1,21 +1,42 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import RecipePreview from '$lib/components/RecipePreview.svelte';
+	import { localStorageStore } from '@skeletonlabs/skeleton';
 	import type { ActionData, PageData } from './$types';
+	import type { MainSchema } from '$lib/formSchema';
+	import { onMount } from 'svelte';
+	import RefreshIcon from '~icons/lucide/refresh-cw';
+	import { invalidateAll } from '$app/navigation';
 
 	export let data: PageData;
 	export let form: ActionData;
 
-	let recipes = data.recipes;
+	const recipeStore = localStorageStore<MainSchema[]>('recipes', []);
+
+	onMount(() => {
+		if ($recipeStore.length === 0) {
+			$recipeStore = data.recipes;
+		}
+	});
 
 	$: {
-		recipes = [...recipes, ...(form?.recipes ?? [])];
+		$recipeStore = [...$recipeStore, ...(form?.recipes ?? [])];
 	}
-	$: next = recipes?.at(-1)?.id;
+	$: next = $recipeStore?.at(-1)?.id ?? 1_000_000;
+
+	async function handleRefresh() {
+		await invalidateAll();
+		localStorage.removeItem('recipes');
+		location.reload();
+	}
 </script>
 
+<button class="btn-icon variant-filled-primary mb-6" on:click={handleRefresh}>
+	<RefreshIcon class="" />
+</button>
+
 <ul class="grid gap-6">
-	{#each recipes as recipe}
+	{#each $recipeStore as recipe}
 		<RecipePreview href="recipes/{recipe.id}" {recipe} />
 	{/each}
 </ul>
