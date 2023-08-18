@@ -24,7 +24,7 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request }) => {
+	load: async ({ request }) => {
 		const result = await request.formData();
 		const value = result.get('value') as number | null;
 

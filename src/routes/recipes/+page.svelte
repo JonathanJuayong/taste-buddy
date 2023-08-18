@@ -65,7 +65,7 @@
 	{/each}
 </ul>
 
-<form method="POST" class="flex justify-between mt-10" use:enhance>
+<form method="POST" action="?/load" class="flex justify-between mt-10" use:enhance>
 	{#if !form?.isLastPage && !data.isLastPage}
 		<button class="btn variant-outline-primary w-full" name="value" value={next}>
 			Load More Recipes
