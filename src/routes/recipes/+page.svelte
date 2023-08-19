@@ -1,76 +1,104 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import RecipePreview from '$lib/components/RecipePreview.svelte';
-	import { toastStore } from '@skeletonlabs/skeleton';
-	import type { ActionData, PageData } from './$types';
-	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
 	import RefreshIcon from '~icons/lucide/refresh-cw';
-	import { invalidateAll } from '$app/navigation';
-	import { recipes, scrollStore } from '../../stores/recipes';
-	import { onDestroy } from 'svelte';
+	import SearchIcon from '~icons/lucide/search';
+	import { page } from '$app/stores';
+	import type { MainSchema } from '$lib/formSchema';
 
 	export let data: PageData;
-	export let form: ActionData;
 
-	let scrollY: number;
+	$: ({ recipes, lastSeenId, resultsPerPage, isLastPage } = data);
 
-	onMount(async () => {
-		if ($recipes.length === 0) {
-			$recipes = data.recipes;
-		}
+	let searchQuery: string;
 
-		// Check if there is new data to fetch
-		const latestIdFromLoadFunction = data?.recipes?.at(0)?.id;
+	$: idForFetchingNewRecipes = lastSeenId;
+	$: continueFetching = !isLastPage;
+	$: recipesFetched = recipes;
+	$: href = $page.url.searchParams.get('search')
+		? `${$page.url.pathname}?search=${searchQuery}&items=${
+				recipesFetched.length + resultsPerPage
+		  }&id=${(recipesFetched.at(0)?.id ?? 0) + 1}`
+		: `${$page.url.pathname}?items=${recipesFetched.length + resultsPerPage}&id=${
+				(recipesFetched.at(0)?.id ?? 0) + 1
+		  }`;
 
-		// Check if latest id from load function is not yet in recipes store
-		const newRecipeAvailable = !$recipes?.find(({ id }) => id === latestIdFromLoadFunction);
-		if (newRecipeAvailable) {
-			toastStore.trigger({
-				message:
-					'There are new recipes available. Click the "Get Latest Recipes" button to view them',
-				background: 'variant-filled-secondary'
+	function fetchMoreRecipes(searchQuery: string, lastSeenId: number, resultsPerPage: number) {
+		return async () => {
+			const body = {
+				searchQuery: searchQuery ?? '',
+				lastSeenId,
+				resultsPerPage
+			};
+
+			const request = await fetch('/api/recipes', {
+				method: 'post',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(body)
 			});
-		}
 
-		scrollY = $scrollStore;
-	});
+			const data = (await request.json()) as {
+				recipes: MainSchema[];
+				isLastPage: boolean;
+				lastId: number;
+			};
 
-	onDestroy(() => {
-		$scrollStore = scrollY;
-	});
+			continueFetching = !data.isLastPage;
+			idForFetchingNewRecipes = data.lastId;
+			recipesFetched = [...recipesFetched, ...data.recipes];
 
-	$: {
-		$recipes = [...$recipes, ...(form?.recipes ?? [])];
-	}
-
-	$: next = $recipes?.at(-1)?.id ?? 1_000_000;
-
-	async function handleRefresh() {
-		await invalidateAll();
-		localStorage.removeItem('recipes');
-		localStorage.removeItem('scroll');
-		location.reload();
+			window.history.pushState({ path: $page.url.pathname }, '', href);
+		};
 	}
 </script>
 
-<svelte:window bind:scrollY />
+<form
+	method="get"
+	action={$page.url.pathname}
+	class="mb-6 grid grid-cols-7 place-items-end justify-between"
+>
+	<label class="col-span-6">
+		<span class="ml-2 my-2 inline-block uppercase font-bold text-secondary-500 opacity-50 text-sm">
+			Search Recipes
+		</span>
+		<input
+			name="search"
+			bind:value={searchQuery}
+			placeholder="Type a recipe name here"
+			class="input"
+			type="text"
+		/>
+	</label>
+	<button class="btn-icon variant-filled-primary col-span-1" aria-label="search button">
+		<SearchIcon />
+	</button>
+</form>
 
-<button class="btn w-full variant-filled-primary mb-6" on:click={handleRefresh}>
+<a href="/recipes" data-sveltekit-reload class="btn w-full variant-filled-primary mb-6">
 	Get Latest Recipes <RefreshIcon class="ml-2" />
-</button>
+</a>
 
 <ul class="grid gap-6 scroll-smooth">
-	{#each $recipes as recipe}
-		<RecipePreview href="recipes/{recipe.id}" {recipe} />
+	{#each recipesFetched as { id, name, image_src, description, serves, cook_time, prep_time }}
+		<RecipePreview
+			href="recipes/{id}"
+			{name}
+			{image_src}
+			{description}
+			{serves}
+			{cook_time}
+			{prep_time}
+		/>
 	{/each}
 </ul>
 
-<form method="POST" action="?/load" class="flex justify-between mt-10" use:enhance>
-	{#if !form?.isLastPage && !data.isLastPage}
-		<button class="btn variant-outline-primary w-full" name="value" value={next}>
-			Load More Recipes
-		</button>
-	{:else}
-		<p class="mx-auto text-surface-300">No more recipes to load</p>
-	{/if}
-</form>
+{#if continueFetching}
+	<button
+		class="btn variant-outline-primary w-full my-6"
+		on:click={fetchMoreRecipes(searchQuery, idForFetchingNewRecipes, resultsPerPage)}
+	>
+		Fetch More Recipes
+	</button>
+{:else}
+	<p class="text-center mx-auto my-6">No more recipes to fetch</p>
+{/if}
