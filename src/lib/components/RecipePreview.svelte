@@ -1,13 +1,16 @@
 <script lang="ts">
-	import type { MainSchema } from '$lib/formSchema';
 	import { CldImage } from 'svelte-cloudinary';
 	import PersonIcon from '~icons/charm/person';
 	import StoveIcon from '~icons/mdi/stove-burner';
 	import KnifeIcon from '~icons/icon-park-outline/kitchen-knife';
 
-	export let href: string;
-	export let recipe: MainSchema;
-	const { name, image_src, description, serves, cook_time, prep_time } = recipe;
+	export let href: string,
+		name: string,
+		image_src: string,
+		description: string,
+		serves: number,
+		cook_time: number,
+		prep_time: number;
 </script>
 
 <a {href} class="card">
