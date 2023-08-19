@@ -114,3 +114,19 @@ export const addRecipe = async (recipe: MainSchema, author_id: string) => {
 export const deleteRecipe = async (id: number) => {
 	await sql`DELETE FROM recipe_ WHERE id=${id}`;
 };
+
+export const searchRecipesByNamePaginated = async (
+	search: string,
+	lastSeenId: number,
+	resultsPerPage: number
+) => {
+	const string = `%${search}%`;
+	return await sql<MainSchema[]>`
+    SELECT * FROM recipe_ 
+      WHERE 
+        id < ${lastSeenId}
+        AND name ILIKE ${string} 
+      ORDER BY id DESC 
+      FETCH FIRST ${resultsPerPage} ROWS ONLY
+    `;
+};
