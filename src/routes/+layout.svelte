@@ -24,6 +24,12 @@
 	<button class="btn absolute top-4 right-2" on:click={() => drawerStore.close()}><XIcon /></button>
 </Drawer>
 
-<div class="max-w-4xl mx-auto">
-	<slot />
-</div>
+<nav class="flex items-center justify-between py-5">
+	<p class="font-extrabold">Taste Buddy</p>
+	<ul class="flex gap-6">
+		<li><a href="/app">App</a></li>
+		<li><a href="/recipes">Recipes</a></li>
+		<li><a href="signin">Sign in</a></li>
+	</ul>
+</nav>
+<slot />
