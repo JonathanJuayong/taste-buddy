@@ -7,7 +7,7 @@
 	const { recipes } = data;
 </script>
 
-<div class="grid gap-6 items-center h-full">
+<div class="grid sm:grid-cols-2 gap-6 items-center h-full">
 	{#if recipes.length === 0}
 		<article class="text-center space-y-4">
 			<p class="h2">You don't have any recipes yet</p>
