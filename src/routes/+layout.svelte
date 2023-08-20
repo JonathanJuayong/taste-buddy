@@ -62,7 +62,7 @@
 	<p class="font-extrabold">Taste Buddy</p>
 </AppBar>
 
-<div class="px-6 max-w-4xl mx-auto">
+<div class="px-6 max-w-4xl mx-auto min-h-screen">
 	<nav class="sm:flex items-center justify-between py-6 mb-6 hidden">
 		<p class="font-extrabold">Taste Buddy</p>
 		<ul class="flex gap-6 items-center">
