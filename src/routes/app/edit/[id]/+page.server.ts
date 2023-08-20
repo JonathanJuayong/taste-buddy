@@ -5,6 +5,10 @@ import { mainSchema } from '$lib/formSchema';
 import { redirect } from '@sveltejs/kit';
 
 export const load = (async ({ params, locals }) => {
+	if (!locals.user.uid) {
+		throw redirect(301, '/signin');
+	}
+
 	const { id } = params;
 
 	// avoid isNan errors by coercing id into number
