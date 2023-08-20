@@ -33,6 +33,15 @@ export const getUserById = async (id: string) => {
 	return results[0];
 };
 
+export const getRecipesPaginated = async (resultsPerPage: number, lastSeenId: number) => {
+	return await sql<MainSchema[]>`
+    SELECT * FROM recipe_
+      WHERE id < ${lastSeenId}
+      ORDER BY id DESC
+      FETCH FIRST ${resultsPerPage} ROWS ONLY
+  `;
+};
+
 export const getAllUsers = async () => await sql`SELECT * FROM user_;`;
 
 export const createUser = async (id: string) => await sql`INSERT INTO user_ (id) VALUES (${id})`;
@@ -104,4 +113,20 @@ export const addRecipe = async (recipe: MainSchema, author_id: string) => {
 
 export const deleteRecipe = async (id: number) => {
 	await sql`DELETE FROM recipe_ WHERE id=${id}`;
+};
+
+export const searchRecipesByNamePaginated = async (
+	search: string,
+	lastSeenId: number,
+	resultsPerPage: number
+) => {
+	const string = `%${search}%`;
+	return await sql<MainSchema[]>`
+    SELECT * FROM recipe_ 
+      WHERE 
+        id < ${lastSeenId}
+        AND name ILIKE ${string} 
+      ORDER BY id DESC 
+      FETCH FIRST ${resultsPerPage} ROWS ONLY
+    `;
 };
