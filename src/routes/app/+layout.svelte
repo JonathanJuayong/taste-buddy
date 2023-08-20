@@ -31,20 +31,7 @@
 </script>
 
 <main class="flex flex-col h-full">
-	<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
-		<svelte:fragment slot="lead">
-			<button on:click={openDrawer} class="btn btn-icon p-1">
-				<MenuIcon />
-			</button>
-		</svelte:fragment>
-		<h1 class="h1">{getPageName($page.url.pathname)}</h1>
-		<svelte:fragment slot="trail">
-			<button class="btn btn-icon p-1">
-				<BabyIcon />
-			</button>
-		</svelte:fragment>
-	</AppBar>
-	<div class="flex-grow py-6 px-4">
+	<div class="flex-grow py-6">
 		<ul class="breadcrumb-nonresponsive mb-6">
 			{#if $page.url.pathname === '/app'}
 				<li>
