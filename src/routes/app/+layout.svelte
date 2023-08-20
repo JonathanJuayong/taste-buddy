@@ -4,7 +4,7 @@
 </script>
 
 <main class="flex flex-col h-full">
-	<div class="flex-grow pb-6 relative">
+	<div class="flex-grow pb-6 mb-12 relative">
 		<ul class="breadcrumb-nonresponsive mb-6">
 			{#if $page.url.pathname === '/app'}
 				<li>
