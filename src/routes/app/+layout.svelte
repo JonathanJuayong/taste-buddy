@@ -1,37 +1,10 @@
 <script lang="ts">
-	import { AppBar, drawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
-	import MenuIcon from '~icons/lucide/menu';
-	import BabyIcon from '~icons/lucide/baby';
 	import HomeIcon from '~icons/lucide/home';
 	import { page } from '$app/stores';
-
-	const drawerSettings: DrawerSettings = {
-		id: 'main',
-		position: 'left'
-	};
-
-	function getPageName(url: string) {
-		switch (url) {
-			case '/app': {
-				return 'Home';
-			}
-			case '/app/create': {
-				return 'Create';
-			}
-
-			default: {
-				return 'App';
-			}
-		}
-	}
-
-	function openDrawer() {
-		drawerStore.open(drawerSettings);
-	}
 </script>
 
 <main class="flex flex-col h-full">
-	<div class="flex-grow py-6">
+	<div class="flex-grow pb-6 relative">
 		<ul class="breadcrumb-nonresponsive mb-6">
 			{#if $page.url.pathname === '/app'}
 				<li>
