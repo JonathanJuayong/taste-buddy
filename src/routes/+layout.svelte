@@ -9,6 +9,9 @@
 	import XIcon from '~icons/lucide/x';
 	import MenuIcon from '~icons/lucide/menu';
 	import type { LayoutData } from './$types';
+	import FacebookIcon from '~icons/mdi/facebook';
+	import TwitterIcon from '~icons/mdi/twitter';
+	import InstagramIcon from '~icons/mdi/instagram';
 
 	export let data: LayoutData;
 
@@ -59,8 +62,8 @@
 	<p class="font-extrabold">Taste Buddy</p>
 </AppBar>
 
-<div class="px-6">
-	<nav class="sm:flex items-center justify-between py-4 mb-6 hidden">
+<div class="px-6 max-w-4xl mx-auto">
+	<nav class="sm:flex items-center justify-between py-6 mb-6 hidden">
 		<p class="font-extrabold">Taste Buddy</p>
 		<ul class="flex gap-6 items-center">
 			<li><a href="/app">App</a></li>
@@ -83,3 +86,14 @@
 	</nav>
 	<slot />
 </div>
+<footer class="mt-5 py-20 bg-surface-800">
+	<div class="max-w-4xl mx-auto flex flex-col items-center gap-10">
+		<p class="font-extrabold">Taste Buddy</p>
+		<ul class="flex gap-4 justify-center">
+			<li><button class="btn-icon variant-outline-surface"><FacebookIcon /></button></li>
+			<li><button class="btn-icon variant-outline-surface"><TwitterIcon /></button></li>
+			<li><button class="btn-icon variant-outline-surface"><InstagramIcon /></button></li>
+		</ul>
+		<p class="text-sm text-surface-400">All Rights Reserved {new Date().getFullYear()}</p>
+	</div>
+</footer>
