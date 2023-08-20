@@ -11,36 +11,47 @@
 		serves: number,
 		cook_time: number,
 		prep_time: number;
+
+	function truncateText(text: string, maxLength: number) {
+		if (text.length > maxLength) {
+			const truncated = text.slice(0, maxLength - 3);
+			return `${truncated}...`;
+		}
+
+		return text;
+	}
 </script>
 
-<a {href} class="card">
+<a {href} class="card sm:grid sm:grid-cols-2">
 	<header>
 		<CldImage
-			class="rounded-t-3xl"
+			class="rounded-t-3xl sm:rounded-none sm:h-full sm:rounded-l-3xl"
 			height=""
 			width="1000"
 			alt={name}
-			aspectRatio={1.0}
+			aspectRatio={1.9}
 			src={image_src}
 		/>
 	</header>
-	<section class="grid p-10 justify-center text-center">
-		<h3 class="h3 font-extrabold mb-4">{name}</h3>
-		<p>{description}</p>
-	</section>
-	<footer class="border-t-2 border-t-surface-700 h-20">
-		<ul class="flex justify-evenly h-full">
-			<li class="flex items-center h-full">
-				<PersonIcon class="mr-2" />
-				{serves}
-			</li>
-			<li aria-label="separator" class="border-r-2 border-r-surface-700" />
-			<li class="flex items-center h-full">
-				<StoveIcon class="mr-2" />
-				{cook_time}
-			</li>
-			<li aria-label="separator" class="border-r-2 border-r-surface-700" />
-			<li class="flex items-center"><KnifeIcon class="mr-2" />{prep_time}</li>
-		</ul>
-	</footer>
+	<article>
+		<section class="p-10">
+			<h3 class="h3 font-extrabold mb-4">{name}</h3>
+			<p>{truncateText(description, 80)}</p>
+		</section>
+		<footer class="border-t-2 border-t-surface-700 h-20">
+			<ul class="flex justify-evenly h-full">
+				<li class="flex items-center h-full">
+					<PersonIcon class="mr-2" />
+					{serves}
+				</li>
+				<li aria-label="separator" class="border-r-2 border-r-surface-700" />
+				<li class="flex items-center h-full">
+					<StoveIcon class="mr-2" />
+					{cook_time}
+				</li>
+				<li aria-label="separator" class="border-r-2 border-r-surface-700" />
+				<li class="flex items-center"><KnifeIcon class="mr-2" />{prep_time}</li>
+			</ul>
+		</footer>
+	</article>
 </a>
