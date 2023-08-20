@@ -3,7 +3,7 @@
 	import HomeIcon from '~icons/lucide/home';
 </script>
 
-<article class="m-4">
+<div class="m-4">
 	<ul class="breadcrumb-nonresponsive mb-6">
 		{#if $page.url.pathname === '/recipes'}
 			<li>
@@ -31,4 +31,4 @@
 		<li />
 	</ul>
 	<slot />
-</article>
+</div>
