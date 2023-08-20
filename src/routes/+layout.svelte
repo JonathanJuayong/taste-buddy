@@ -23,4 +23,7 @@
 	</ul>
 	<button class="btn absolute top-4 right-2" on:click={() => drawerStore.close()}><XIcon /></button>
 </Drawer>
-<slot />
+
+<div class="max-w-4xl mx-auto">
+	<slot />
+</div>
