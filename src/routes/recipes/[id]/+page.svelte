@@ -10,14 +10,14 @@
 	<head>
 		<title>{recipe.name}</title>
 	</head>
-	<article class="grid gap-12">
+	<article class="grid gap-12 mb-20">
 		<section class="grid gap-4">
 			<CldImage
 				class="mb-4"
 				height=""
 				width="1000"
 				alt={recipe.name}
-				aspectRatio={1.0}
+				aspectRatio={1.9}
 				src={recipe.image_src}
 			/>
 			<h2 class="h1 pb-2">{recipe.name}</h2>
