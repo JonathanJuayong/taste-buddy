@@ -3,7 +3,6 @@
 	import { page } from '$app/stores';
 	import RecipeForm from '$lib/components/RecipeForm.svelte';
 	import { goto } from '$app/navigation';
-	import { recipes } from '../../../../stores/recipes';
 
 	export let data: PageData;
 	const { form, editable } = data;
