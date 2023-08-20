@@ -20,12 +20,7 @@
 			onResult={async () => await goto('/app')}
 		/>
 		<form method="POST" action="{$page.url.pathname}?/delete">
-			<button
-				class="btn variant-outline-error w-full"
-				on:click={() => {
-					$recipes = $recipes.filter(({ id }) => data?.recipe?.id !== id);
-				}}>Delete Recipe</button
-			>
+			<button class="btn variant-outline-error w-full"> Delete Recipe </button>
 		</form>
 		<a href="/app" class="btn variant-outline-tertiary"> Cancel Edit </a>
 	</article>
