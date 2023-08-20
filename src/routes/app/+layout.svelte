@@ -3,6 +3,10 @@
 	import { page } from '$app/stores';
 </script>
 
+<head>
+	<title>App | Taste Buddy</title>
+</head>
+
 <main class="flex flex-col h-full">
 	<div class="flex-grow pb-6 mb-12 relative">
 		<ul class="breadcrumb-nonresponsive mb-6">
