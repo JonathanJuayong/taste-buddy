@@ -2,7 +2,7 @@
 	import { auth } from '$lib/firebase';
 	import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 	import type { PageData } from './$types';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import EmailIcon from '~icons/mdi/email-outline';
 	import SignInWithProviderButton from '$lib/components/SignInWithProviderButton.svelte';
 	import ButtonWithSpinner from '$lib/components/ButtonWithSpinner.svelte';
@@ -22,6 +22,7 @@
 			method: 'DELETE'
 		});
 		await signOut(auth);
+		await invalidateAll();
 		goto('/');
 	}
 

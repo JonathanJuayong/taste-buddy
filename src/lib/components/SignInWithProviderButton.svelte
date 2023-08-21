@@ -3,7 +3,7 @@
 	import { signInWithPopup, OAuthProvider } from 'firebase/auth';
 	import GoogleIcon from '~icons/devicon-plain/google';
 	import MicrosoftIcon from '~icons/mdi/microsoft';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import ButtonWithSpinner from './ButtonWithSpinner.svelte';
 
 	type SignInState = 'initial' | 'loading';
@@ -49,6 +49,7 @@
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ idToken })
 				});
+				await invalidateAll();
 				await goto('/app');
 			} catch (error) {
 				state = 'initial';

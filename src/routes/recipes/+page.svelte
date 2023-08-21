@@ -52,12 +52,8 @@
 	}
 </script>
 
-<form
-	method="get"
-	action={$page.url.pathname}
-	class="mb-6 grid grid-cols-7 place-items-end justify-between"
->
-	<label class="col-span-6">
+<form method="get" action={$page.url.pathname} class="mb-6 flex gap-2 items-end">
+	<label class="flex-1">
 		<span class="ml-2 my-2 inline-block uppercase font-bold text-secondary-500 opacity-50 text-sm">
 			Search Recipes
 		</span>
@@ -69,12 +65,11 @@
 			type="text"
 		/>
 	</label>
-	<button class="btn-icon variant-filled-primary col-span-1" aria-label="search button">
+	<button class="btn-icon variant-filled-primary" aria-label="search button">
 		<SearchIcon />
 	</button>
 </form>
-
-<a href="/recipes" data-sveltekit-reload class="btn w-full variant-filled-primary mb-6">
+<a href="/recipes" data-sveltekit-reload class="btn w-full variant-ringed-primary mb-6">
 	Get Latest Recipes <RefreshIcon class="ml-2" />
 </a>
 
@@ -94,11 +89,11 @@
 
 {#if continueFetching}
 	<button
-		class="btn variant-outline-primary w-full my-6"
+		class="btn mx-auto block my-16 variant-soft-secondary"
 		on:click={fetchMoreRecipes(searchQuery, idForFetchingNewRecipes, resultsPerPage)}
 	>
 		Fetch More Recipes
 	</button>
 {:else}
-	<p class="text-center mx-auto my-6">No more recipes to fetch</p>
+	<p class="text-center mx-auto my-16">No more recipes to fetch</p>
 {/if}

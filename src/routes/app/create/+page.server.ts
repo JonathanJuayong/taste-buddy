@@ -1,10 +1,14 @@
 import { mainSchema } from '$lib/formSchema';
 import { addRecipe } from '$lib/server/db';
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
 
-export const load = (async () => {
+export const load = (async ({ locals }) => {
+	if (!locals.user.uid) {
+		throw redirect(301, '/signin');
+	}
+
 	const form = await superValidate(mainSchema);
 	return { form };
 }) satisfies PageServerLoad;
