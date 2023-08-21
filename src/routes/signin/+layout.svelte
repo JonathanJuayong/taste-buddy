@@ -1,5 +1,5 @@
-<head>
+<svelte:head>
 	<title>Sign In | Taste Buddy</title>
-</head>
+</svelte:head>
 
 <slot />

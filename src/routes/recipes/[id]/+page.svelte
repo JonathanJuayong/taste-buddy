@@ -6,10 +6,10 @@
 	const { recipe, editable } = data;
 </script>
 
+<svelte:head>
+	<title>{recipe.name}</title>
+</svelte:head>
 {#if recipe}
-	<head>
-		<title>{recipe.name}</title>
-	</head>
 	<article class="grid gap-12 mb-20">
 		<section class="grid gap-4">
 			<CldImage
