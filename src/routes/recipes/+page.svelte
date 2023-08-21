@@ -89,11 +89,11 @@
 
 {#if continueFetching}
 	<button
-		class="btn w-full my-6"
+		class="btn w-full my-16"
 		on:click={fetchMoreRecipes(searchQuery, idForFetchingNewRecipes, resultsPerPage)}
 	>
 		Fetch More Recipes
 	</button>
 {:else}
-	<p class="text-center mx-auto my-6">No more recipes to fetch</p>
+	<p class="text-center mx-auto my-16">No more recipes to fetch</p>
 {/if}
