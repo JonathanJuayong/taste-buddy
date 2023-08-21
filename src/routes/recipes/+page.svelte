@@ -89,7 +89,7 @@
 
 {#if continueFetching}
 	<button
-		class="btn w-full my-16"
+		class="btn mx-auto block my-16 variant-soft-secondary"
 		on:click={fetchMoreRecipes(searchQuery, idForFetchingNewRecipes, resultsPerPage)}
 	>
 		Fetch More Recipes
