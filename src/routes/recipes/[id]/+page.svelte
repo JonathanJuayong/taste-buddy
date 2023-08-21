@@ -20,7 +20,7 @@
 			src={recipe.image_src}
 		/>
 		<div
-			class="relative space-y-12 sm:space-y-0 sm:grid sm:gap-6 sm:grid-cols-2 sm:justify-between"
+			class="relative space-y-12 sm:space-y-0 sm:grid sm:gap-16 sm:grid-cols-2 sm:justify-between"
 		>
 			<section class="space-y-4">
 				<header class="flex gap-2">
