@@ -94,6 +94,6 @@
 			<li><button class="btn-icon variant-outline-surface"><TwitterIcon /></button></li>
 			<li><button class="btn-icon variant-outline-surface"><InstagramIcon /></button></li>
 		</ul>
-		<p class="text-sm text-surface-400">All Rights Reserved {new Date().getFullYear()}</p>
+		<p class="text-sm text-surface-400">Copyright {new Date().getFullYear()}</p>
 	</div>
 </footer>
