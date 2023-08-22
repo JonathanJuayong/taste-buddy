@@ -3,9 +3,11 @@ import { superValidate } from 'sveltekit-superforms/client';
 import type { PageServerLoad } from './$types';
 import { mainSchema } from '$lib/formSchema';
 import { redirect } from '@sveltejs/kit';
+import { createTemporaryRedirectCookie } from '$lib/server/helpers';
 
-export const load = (async ({ params, locals }) => {
+export const load = (async ({ params, locals, cookies }) => {
 	if (!locals.user.uid) {
+		createTemporaryRedirectCookie(cookies);
 		throw redirect(302, '/signin');
 	}
 
@@ -33,9 +35,10 @@ export const actions = {
 		const newRecipe = form.data;
 		updateRecipe(Number(newRecipe.id), newRecipe);
 	},
-	delete: async ({ params }) => {
+	delete: async ({ params, cookies }) => {
 		const { id } = params;
 		deleteRecipe(Number(id));
+		createTemporaryRedirectCookie(cookies);
 		throw redirect(302, '/app');
 	}
 };

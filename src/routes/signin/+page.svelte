@@ -8,8 +8,20 @@
 	import ButtonWithSpinner from '$lib/components/ButtonWithSpinner.svelte';
 	import { FirebaseError } from 'firebase/app';
 	import { toastStore } from '@skeletonlabs/skeleton';
+	import { browser } from '$app/environment';
 
 	export let data: PageData;
+
+	if (browser) {
+		const cookies = document.cookie;
+		if (cookies.includes('isRedirected')) {
+			toastStore.trigger({
+				message: 'You need to sign in first',
+				background: 'variant-filled-primary'
+			});
+		}
+	}
+
 	const uid = data.user.uid;
 
 	let email: string;
