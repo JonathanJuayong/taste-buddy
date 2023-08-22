@@ -59,7 +59,8 @@
 		</div>
 	</article>
 {:else}
-	<article class="">
-		<h2>Oops... We couldn't find that recipe</h2>
+	<article class="grid gap-10 place-content-center place-items-center">
+		<h2 class="h2">Oops... we can't find that recipe 😅</h2>
+		<a href="/recipes" class="anchor">Click here to go back to browsing recipes</a>
 	</article>
 {/if}
