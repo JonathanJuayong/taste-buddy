@@ -7,6 +7,7 @@
 	import SignInWithProviderButton from '$lib/components/SignInWithProviderButton.svelte';
 	import ButtonWithSpinner from '$lib/components/ButtonWithSpinner.svelte';
 	import { FirebaseError } from 'firebase/app';
+	import { toastStore } from '@skeletonlabs/skeleton';
 
 	export let data: PageData;
 	const uid = data.user.uid;
@@ -24,6 +25,10 @@
 		await signOut(auth);
 		await invalidateAll();
 		goto('/');
+		toastStore.trigger({
+			message: 'You are now signed out.',
+			background: 'variant-filled-primary'
+		});
 	}
 
 	async function signInWithEmail() {
