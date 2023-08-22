@@ -6,7 +6,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 
 export const load = (async ({ locals }) => {
 	if (!locals.user.uid) {
-		throw redirect(301, '/signin');
+		throw redirect(302, '/signin');
 	}
 
 	const form = await superValidate(mainSchema);

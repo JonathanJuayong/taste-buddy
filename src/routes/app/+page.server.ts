@@ -8,7 +8,7 @@ export const load = (async ({ locals }) => {
 	} = locals;
 
 	if (!uid) {
-		throw redirect(301, '/signin');
+		throw redirect(302, '/signin');
 	}
 
 	const recipes = await getRecipesByUser(uid);
