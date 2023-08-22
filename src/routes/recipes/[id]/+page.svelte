@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>{recipe.name}</title>
+	<title>{recipe?.name ?? 'Recipe does not exist'}</title>
 </svelte:head>
 {#if recipe}
 	<article class="space-y-12 mb-20 aspec">
@@ -59,9 +59,6 @@
 		</div>
 	</article>
 {:else}
-	<head>
-		<title>Recipe does not exist</title>
-	</head>
 	<article class="">
 		<h2>Oops... We couldn't find that recipe</h2>
 	</article>
