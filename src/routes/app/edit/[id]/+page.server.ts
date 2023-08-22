@@ -6,7 +6,7 @@ import { redirect } from '@sveltejs/kit';
 
 export const load = (async ({ params, locals }) => {
 	if (!locals.user.uid) {
-		throw redirect(301, '/signin');
+		throw redirect(302, '/signin');
 	}
 
 	const { id } = params;
@@ -36,6 +36,6 @@ export const actions = {
 	delete: async ({ params }) => {
 		const { id } = params;
 		deleteRecipe(Number(id));
-		throw redirect(301, '/app');
+		throw redirect(302, '/app');
 	}
 };
