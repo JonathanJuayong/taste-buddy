@@ -35,10 +35,9 @@ export const actions = {
 		const newRecipe = form.data;
 		updateRecipe(Number(newRecipe.id), newRecipe);
 	},
-	delete: async ({ params, cookies }) => {
+	delete: async ({ params }) => {
 		const { id } = params;
 		deleteRecipe(Number(id));
-		createTemporaryRedirectCookie(cookies);
 		throw redirect(302, '/app');
 	}
 };
