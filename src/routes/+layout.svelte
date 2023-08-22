@@ -49,7 +49,15 @@
 	<ul class="space-y-5">
 		<li><a class="text-2xl" href="/app">App</a></li>
 		<li><a class="text-2xl" href="/recipes">Recipes</a></li>
-		<li><a class="text-2xl" href="/signin">Sign in</a></li>
+		<li>
+			<a class="text-2xl" href="/signin">
+				{#if uid}
+					Sign out
+				{:else}
+					Sign in
+				{/if}
+			</a>
+		</li>
 		{#if uid}
 			<li><a class="text-2xl" href="/app/create">Create</a></li>
 		{/if}
