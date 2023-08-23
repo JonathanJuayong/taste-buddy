@@ -1,4 +1,4 @@
-import { mainSchema } from '$lib/formSchema';
+import { mainSchema, type MainSchema } from '$lib/formSchema';
 import { addRecipe } from '$lib/server/db';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
@@ -16,17 +16,28 @@ export const load = (async ({ locals, cookies }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals }) => {
-		const {
-			user: { uid }
-		} = locals;
+	default: async ({ request, locals, fetch }) => {
+		try {
+			const {
+				user: { uid }
+			} = locals;
 
-		if (!uid) throw error(400, 'Cannot create recipe without author');
+			if (!uid) throw error(400, 'Cannot create recipe without author');
 
-		const form = await superValidate(request, mainSchema);
+			const form = await superValidate(request.clone(), mainSchema);
 
-		await addRecipe(form.data, uid);
+			const formData = await request.clone().formData();
 
-		return { form };
+			const req = await fetch('/api/images', { method: 'POST', body: formData });
+			const { public_id } = (await req.json()) as { public_id: string };
+
+			const updatedRecipe: MainSchema = { ...form.data, image_src: public_id };
+
+			await addRecipe(updatedRecipe, uid);
+
+			return { form };
+		} catch (e) {
+			throw error(400, 'Something went wrong');
+		}
 	}
 };
