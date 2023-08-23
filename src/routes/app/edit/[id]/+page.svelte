@@ -6,8 +6,11 @@
 	import { enhance } from '$app/forms';
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import { confirmModal } from '$lib/utils';
+	import ButtonWithSpinner from '$lib/components/ButtonWithSpinner.svelte';
 
 	export let data: PageData;
+	let isLoading = false;
+
 	const { form, editable } = data;
 	$: recipe = data.recipe;
 </script>
@@ -25,6 +28,7 @@
 			method="POST"
 			action="{$page.url.pathname}?/delete"
 			use:enhance={async ({ cancel, formData }) => {
+				isLoading = true;
 				const response = await confirmModal(
 					`Delete Recipe: ${recipe?.name}`,
 					'Are you sure you want to delete this recipe?'
@@ -43,9 +47,15 @@
 				}
 			}}
 		>
-			<button class="btn variant-outline-error w-full"> Delete Recipe </button>
+			<ButtonWithSpinner
+				{isLoading}
+				variantDefault="variant-outline-error"
+				variantLoading="variant-outline-surface"
+			>
+				Delete
+			</ButtonWithSpinner>
 		</form>
-		<a href="/app" class="btn variant-outline-tertiary"> Cancel Edit </a>
+		<a href={isLoading ? '' : '/app'} class="btn variant-outline-tertiary"> Cancel Edit </a>
 	</article>
 {:else if !recipe}
 	<h2>Oops... We couldn't find that recipe.</h2>
