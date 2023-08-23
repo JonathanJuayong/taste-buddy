@@ -172,22 +172,24 @@
 					}}
 					let:i
 				>
-					<LabeledInput
-						name="steps"
-						label={`Step #${i + 1}`}
-						type="text"
-						error={$errors.steps?.[i].step}
-						bind:value={$form.steps[i].step}
-						{...$constraints.steps}
-					/>
-					{#if deleteStepBtnIsShown}
-						<button class="absolute top-2 right-2" type="button" on:click={removeStep(i)}>
-							<XIcon class="text-error-900" />
-						</button>
-						<div
-							class="handle absolute border-t-4 rounded-full w-20 left-0 mx-auto right-0 top-5 cursor-move"
+					<div use:focus={i}>
+						<LabeledInput
+							name="steps"
+							label={`Step #${i + 1}`}
+							type="text"
+							error={$errors.steps?.[i].step}
+							bind:value={$form.steps[i].step}
+							{...$constraints.steps}
 						/>
-					{/if}
+						{#if deleteStepBtnIsShown}
+							<button class="absolute top-2 right-2" type="button" on:click={removeStep(i)}>
+								<XIcon class="text-error-900" />
+							</button>
+							<div
+								class="handle absolute border-t-4 rounded-full w-20 left-0 mx-auto right-0 top-5 cursor-move"
+							/>
+						{/if}
+					</div>
 				</SortableList>
 				<button class="btn variant-outline-primary mt-8 w-full" type="button" on:click={addStep}>
 					Add
