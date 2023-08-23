@@ -97,7 +97,7 @@
 <!-- <SuperDebug data={$form} /> -->
 
 <form method="POST" action={actionUrl} class="grid" use:enhance>
-	<TabGroup class="mb-8" justify="justify-between">
+	<TabGroup class="mb-8" regionPanel="grid gap-4" justify="justify-between">
 		{#each tabs as { name, label }, i}
 			<Tab bind:group={activeTab} {name} value={i}>{label}</Tab>
 		{/each}
@@ -197,7 +197,7 @@
 						animate:flip={{ duration: 100 }}
 						use:draggable={{
 							bounds: { left: 20, right: 20 },
-							// handle: '.handle',
+							handle: '.handle',
 							position,
 							onDragStart: () => {
 								activeIndex = i;
@@ -229,6 +229,9 @@
 							<button class="absolute top-2 right-2" type="button" on:click={removeStep(i)}>
 								<XIcon class="text-error-900" />
 							</button>
+							<div
+								class="handle absolute border-t-4 rounded-full w-20 left-0 mx-auto right-0 top-5 cursor-move"
+							/>
 						{/if}
 					</div>
 				{/each}
