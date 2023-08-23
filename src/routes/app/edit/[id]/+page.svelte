@@ -24,11 +24,12 @@
 		<form
 			method="POST"
 			action="{$page.url.pathname}?/delete"
-			use:enhance={async ({ cancel }) => {
+			use:enhance={async ({ cancel, formData }) => {
 				const response = await confirmModal(
 					`Delete Recipe: ${recipe?.name}`,
 					'Are you sure you want to delete this recipe?'
 				);
+				formData.append('publicId', recipe?.image_src ?? '');
 				if (response) {
 					return async ({ update }) => {
 						await update();
