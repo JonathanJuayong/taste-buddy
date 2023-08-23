@@ -5,13 +5,21 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
-	import { AppBar, Drawer, Toast, drawerStore, type DrawerSettings } from '@skeletonlabs/skeleton';
+	import {
+		AppBar,
+		Drawer,
+		Toast,
+		drawerStore,
+		type DrawerSettings,
+		Modal
+	} from '@skeletonlabs/skeleton';
 	import XIcon from '~icons/lucide/x';
 	import MenuIcon from '~icons/lucide/menu';
 	import type { LayoutData } from './$types';
 	import FacebookIcon from '~icons/mdi/facebook';
 	import TwitterIcon from '~icons/mdi/twitter';
 	import InstagramIcon from '~icons/mdi/instagram';
+	import { page } from '$app/stores';
 
 	export let data: LayoutData;
 
@@ -29,6 +37,8 @@
 	}
 </script>
 
+<Modal />
+
 <Toast />
 
 <Drawer
@@ -38,11 +48,40 @@
 	}}
 >
 	<ul class="space-y-5">
-		<li><a class="text-2xl" href="/app">App</a></li>
-		<li><a class="text-2xl" href="/recipes">Recipes</a></li>
-		<li><a class="text-2xl" href="/signin">Sign in</a></li>
+		<li>
+			<a
+				class="text-2xl"
+				class:underline={$page.url.pathname.includes('app')}
+				class:underline-offset-4={$page.url.pathname.includes('app')}
+				href="/app">App</a
+			>
+		</li>
+		<li>
+			<a
+				class="text-2xl"
+				class:underline={$page.url.pathname.includes('recipes')}
+				class:underline-offset-4={$page.url.pathname.includes('recipes')}
+				href="/recipes">Recipes</a
+			>
+		</li>
+		<li>
+			<a
+				class="text-2xl"
+				class:underline={$page.url.pathname.includes('signin')}
+				class:underline-offset-4={$page.url.pathname.includes('signin')}
+				href="/signin"
+			>
+				{#if uid}
+					Sign out
+				{:else}
+					Sign in
+				{/if}
+			</a>
+		</li>
 		{#if uid}
-			<li><a class="text-2xl" href="/app/create">Create</a></li>
+			<li>
+				<a class="text-2xl" href="/app/create">Create</a>
+			</li>
 		{/if}
 	</ul>
 	<button class="btn absolute top-4 right-2" on:click={() => drawerStore.close()}><XIcon /></button>
@@ -65,11 +104,27 @@
 <div class="px-6 max-w-4xl mx-auto min-h-screen">
 	<nav class="sm:flex items-center justify-between py-6 mb-6 hidden">
 		<p class="font-extrabold">Taste Buddy</p>
-		<ul class="flex gap-6 items-center">
-			<li><a href="/app">App</a></li>
-			<li><a href="/recipes">Recipes</a></li>
+		<ul class="flex gap-6 items-center transition-all">
 			<li>
-				<a href="signin">
+				<a
+					class:underline={$page.url.pathname.includes('app')}
+					class:underline-offset-4={$page.url.pathname.includes('app')}
+					href="/app">App</a
+				>
+			</li>
+			<li>
+				<a
+					class:underline={$page.url.pathname.includes('recipes')}
+					class:underline-offset-4={$page.url.pathname.includes('recipes')}
+					href="/recipes">Recipes</a
+				>
+			</li>
+			<li>
+				<a
+					href="signin"
+					class:underline={$page.url.pathname.includes('signin')}
+					class:underline-offset-4={$page.url.pathname.includes('signin')}
+				>
 					{#if uid}
 						Sign out
 					{:else}
@@ -79,7 +134,7 @@
 			</li>
 			{#if uid}
 				<li class="variant-outline-primary btn btn-sm">
-					<a class="text-primary-700" href="/app/create">Create</a>
+					<a class="text-primary-700" href="/app/create"> Create </a>
 				</li>
 			{/if}
 		</ul>

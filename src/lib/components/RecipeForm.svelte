@@ -1,7 +1,7 @@
 <script lang="ts">
 	import LabeledInput from '$lib/components/LabeledInput.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
+	import { ProgressRadial, Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import XIcon from '~icons/lucide/x';
 	import type { mainSchema } from '$lib/formSchema';
@@ -10,6 +10,7 @@
 	import UploadWidget from './UploadWidget.svelte';
 	import { flip } from 'svelte/animate';
 	import { draggable } from '@neodrag/svelte';
+	import { focus, generateRandomId, moveItemTo } from '$lib/utils';
 
 	export let formProp: SuperValidated<typeof mainSchema>;
 	export let actionUrl: string;
@@ -23,16 +24,23 @@
 	const threshold = 80;
 	let position = defaultPosition;
 	let activeIndex: number | null = null;
+	let imageFile: File | null;
+	let isUploading = false;
+	let previousImage: string | null = null;
 
 	const formData = superForm(formProp, {
 		dataType: 'json',
+		onSubmit: ({ formData }) => {
+			isUploading = true;
+			if (imageFile) {
+				formData.append('file', imageFile);
+				formData.append('previousImage', previousImage ?? '');
+			}
+		},
 		onResult
 	});
 	const { form, errors, constraints, enhance } = formData;
 
-	function generateRandomId() {
-		return Math.random().toString(36).substring(2, 7);
-	}
 	function addIngredient() {
 		$form.ingredients = [...$form.ingredients, { item: '', qty: 1, unit: '' }];
 	}
@@ -47,38 +55,13 @@
 	function removeStep(index: number) {
 		return () => ($form.steps = $form.steps.filter((_, i) => i !== index));
 	}
-	function focus(element: HTMLElement, index: number) {
-		if (index === 0) return;
-
-		const el = Array.from(element.children)[0] as HTMLElement;
-		el.focus();
-	}
-	function moveItemTo<T>(arr: Array<T>, fromIndex: number, toIndex: number) {
-		const fromIsSameAsToIndex = fromIndex === toIndex;
-		const fromIndexIsInvalid = fromIndex < 0 || fromIndex >= arr.length;
-
-		if (fromIsSameAsToIndex || fromIndexIsInvalid) return arr;
-
-		const item = arr[fromIndex];
-		const modifiedArray = arr.filter((_, i) => i !== fromIndex);
-
-		if (toIndex >= arr.length) {
-			return [...modifiedArray, item];
-		}
-
-		if (toIndex <= 0) {
-			return [item, ...modifiedArray];
-		}
-
-		return [...modifiedArray.slice(0, toIndex), item, ...modifiedArray.slice(toIndex)];
-	}
 
 	let activeTab = 0;
 	const tabs = [
 		{ name: 'info', label: 'Info' },
 		{ name: 'items', label: 'Items' },
 		{ name: 'steps', label: 'Steps' },
-		{ name: 'summary', label: 'Summary' }
+		{ name: 'preview', label: 'Preview' }
 	];
 
 	function prevTab() {
@@ -97,7 +80,7 @@
 <!-- <SuperDebug data={$form} /> -->
 
 <form method="POST" action={actionUrl} class="grid" use:enhance>
-	<TabGroup class="mb-8" justify="justify-between">
+	<TabGroup class="mb-8" regionPanel="grid gap-4" justify="justify-between">
 		{#each tabs as { name, label }, i}
 			<Tab bind:group={activeTab} {name} value={i}>{label}</Tab>
 		{/each}
@@ -142,12 +125,6 @@
 						{...$constraints.prep_time}
 					/>
 				</div>
-				<UploadWidget
-					imageSrc={$form.image_src}
-					on:upload={(e) => {
-						$form.image_src = e.detail;
-					}}
-				/>
 			{:else if activeTab === 1}
 				{#each $form.ingredients as _, i}
 					<div class="grid grid-cols-4 gap-6 relative" use:focus={i}>
@@ -197,7 +174,7 @@
 						animate:flip={{ duration: 100 }}
 						use:draggable={{
 							bounds: { left: 20, right: 20 },
-							// handle: '.handle',
+							handle: '.handle',
 							position,
 							onDragStart: () => {
 								activeIndex = i;
@@ -229,6 +206,9 @@
 							<button class="absolute top-2 right-2" type="button" on:click={removeStep(i)}>
 								<XIcon class="text-error-900" />
 							</button>
+							<div
+								class="handle absolute border-t-4 rounded-full w-20 left-0 mx-auto right-0 top-5 cursor-move"
+							/>
 						{/if}
 					</div>
 				{/each}
@@ -236,6 +216,13 @@
 					Add
 				</button>
 			{:else if activeTab === 3}
+				<UploadWidget
+					imageSrc={$form.image_src}
+					on:imageChange={(e) => {
+						imageFile = e.detail;
+						previousImage = $form.image_src;
+					}}
+				/>
 				<div class="mb-6">
 					<h2 class="h2 mb-2">{$form.name}</h2>
 					<p>{$form.description}</p>
@@ -272,7 +259,19 @@
 			on:click={prevTab}>Prev</button
 		>
 		{#if activeTab === tabs.length - 1}
-			<button class="btn variant-filled-primary" type="submit">Submit</button>
+			<button class="btn variant-filled-primary" disabled={isUploading} type="submit">
+				{#if isUploading}
+					<ProgressRadial
+						stroke={120}
+						class="ml-4"
+						width="w-6"
+						meter="stroke-slate-500"
+						track="stroke-slate-500/30"
+					/>
+				{:else}
+					Submit
+				{/if}
+			</button>
 		{:else}
 			<button class="btn variant-filled-tertiary" type="button" on:click={nextTab}>Next</button>
 		{/if}

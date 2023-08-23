@@ -22,7 +22,7 @@
 	}
 </script>
 
-<a {href} class="card sm:grid sm:grid-cols-2">
+<a {href} target="_blank" class="card sm:grid sm:grid-cols-2">
 	<header>
 		<CldImage
 			class="rounded-t-3xl sm:rounded-none sm:h-full sm:rounded-l-3xl"

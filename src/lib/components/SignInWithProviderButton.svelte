@@ -5,6 +5,7 @@
 	import MicrosoftIcon from '~icons/mdi/microsoft';
 	import { goto, invalidateAll } from '$app/navigation';
 	import ButtonWithSpinner from './ButtonWithSpinner.svelte';
+	import { toastStore } from '@skeletonlabs/skeleton';
 
 	type SignInState = 'initial' | 'loading';
 	type Providers = 'google' | 'microsoft';
@@ -51,8 +52,16 @@
 				});
 				await invalidateAll();
 				await goto('/app');
+				toastStore.trigger({
+					message: 'Successfully signed in!',
+					background: 'variant-filled-success'
+				});
 			} catch (error) {
 				state = 'initial';
+				toastStore.trigger({
+					message: 'Sign in failed. Please try again',
+					background: 'variant-filled-error'
+				});
 				console.log(error);
 			}
 		};
