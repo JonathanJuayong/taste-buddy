@@ -12,7 +12,6 @@
 	export let imageSrc: string | null = null;
 
 	const dispatch = createEventDispatcher();
-	const cloudinaryUrl = 'https://api.cloudinary.com/v1_1/tastebuddies/image/upload';
 	const conicStops: ConicStop[] = [
 		{ color: 'transparent', start: 0, end: 25 },
 		{ color: 'rgb(var(--color-primary-500))', start: 75, end: 100 }
@@ -28,27 +27,7 @@
 			};
 			allowUpload = false;
 			Preview.src = URL.createObjectURL(file);
-		}
-	}
-
-	async function handleUpload() {
-		const file = files[0];
-		const uploadPreset = 'k8rblh0o';
-		const formData = new FormData();
-		formData.append('file', file);
-		formData.append('upload_preset', uploadPreset);
-		try {
-			isUploading = true;
-			const request = await fetch(cloudinaryUrl, {
-				method: 'POST',
-				body: formData
-			});
-			const response = await request.json();
-			dispatch('upload', response['public_id']);
-			Preview = null;
-			isUploading = false;
-		} catch (error) {
-			console.log('An error occured when uploading', error);
+			dispatch('imageChange', file);
 		}
 	}
 </script>
@@ -63,7 +42,14 @@
 	{/if}
 
 	{#if imageSrc && !Preview && allowUpload === false}
-		<CldImage class="mb-4" height="" width="1000" alt="preview" aspectRatio={1.0} src={imageSrc} />
+		<CldImage
+			class="mb-4"
+			height=""
+			width="1000"
+			alt="preview"
+			aspectRatio={16 / 9}
+			src={imageSrc}
+		/>
 	{/if}
 
 	{#if Preview && !error && allowUpload === false}
@@ -78,22 +64,16 @@
 
 	{#if allowUpload === false}
 		{#if Preview && !error}
-			<div class="flex justify-between">
+			<div class="flex">
 				<button
 					disabled={isUploading}
 					type="button"
-					class="btn variant-outline-surface"
-					on:click={() => (allowUpload = true)}
+					class="btn variant-outline-surface w-full"
+					on:click={() => {
+						allowUpload = true;
+					}}
 				>
 					Change Image
-				</button>
-				<button
-					disabled={isUploading}
-					class="btn variant-filled-surface"
-					type="button"
-					on:click={handleUpload}
-				>
-					Upload Image
 				</button>
 			</div>
 		{:else}
