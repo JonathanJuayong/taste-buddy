@@ -8,9 +8,8 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { ActionResult } from '@sveltejs/kit';
 	import UploadWidget from './UploadWidget.svelte';
-	import { flip } from 'svelte/animate';
-	import { draggable } from '@neodrag/svelte';
 	import { focus, generateRandomId, moveItemTo } from '$lib/utils';
+	import SortableList from './SortableList.svelte';
 
 	export let formProp: SuperValidated<typeof mainSchema>;
 	export let actionUrl: string;
@@ -20,10 +19,6 @@
 		cancel: () => void;
 	}) => void;
 
-	const defaultPosition = { x: 0, y: 0 };
-	const threshold = 80;
-	let position = defaultPosition;
-	let activeIndex: number | null = null;
 	let imageFile: File | null;
 	let isUploading = false;
 	let previousImage: string | null = null;
@@ -166,52 +161,34 @@
 					Add
 				</button>
 			{:else if activeTab === 2}
-				{#each $form.steps as { id }, i (id)}
-					<div
-						class="grid gap-6 relative"
-						class:z-10={i === activeIndex}
-						use:focus={i}
-						animate:flip={{ duration: 100 }}
-						use:draggable={{
-							bounds: { left: 20, right: 20 },
-							handle: '.handle',
-							position,
-							onDragStart: () => {
-								activeIndex = i;
-							},
-							onDragEnd: ({ offsetY }) => {
-								activeIndex = null;
-								position = defaultPosition;
-								const absoluteY = Math.abs(offsetY);
-								if (absoluteY < threshold) return;
-								const indexOffset = Math.floor(absoluteY / threshold);
-
-								if (offsetY > 0) {
-									$form.steps = moveItemTo($form.steps, i, i + indexOffset);
-								} else {
-									$form.steps = moveItemTo($form.steps, i, i - indexOffset);
-								}
-							}
-						}}
-					>
-						<LabeledInput
-							name="steps"
-							label={`Step #${i + 1}`}
-							type="text"
-							error={$errors.steps?.[i].step}
-							bind:value={$form.steps[i].step}
-							{...$constraints.steps}
+				<SortableList
+					itemListWithId={$form.steps}
+					onDragEnd={({ offsetY, indexOffset, i }) => {
+						if (offsetY > 0) {
+							$form.steps = moveItemTo($form.steps, i, i + indexOffset);
+						} else {
+							$form.steps = moveItemTo($form.steps, i, i - indexOffset);
+						}
+					}}
+					let:i
+				>
+					<LabeledInput
+						name="steps"
+						label={`Step #${i + 1}`}
+						type="text"
+						error={$errors.steps?.[i].step}
+						bind:value={$form.steps[i].step}
+						{...$constraints.steps}
+					/>
+					{#if deleteStepBtnIsShown}
+						<button class="absolute top-2 right-2" type="button" on:click={removeStep(i)}>
+							<XIcon class="text-error-900" />
+						</button>
+						<div
+							class="handle absolute border-t-4 rounded-full w-20 left-0 mx-auto right-0 top-5 cursor-move"
 						/>
-						{#if deleteStepBtnIsShown}
-							<button class="absolute top-2 right-2" type="button" on:click={removeStep(i)}>
-								<XIcon class="text-error-900" />
-							</button>
-							<div
-								class="handle absolute border-t-4 rounded-full w-20 left-0 mx-auto right-0 top-5 cursor-move"
-							/>
-						{/if}
-					</div>
-				{/each}
+					{/if}
+				</SortableList>
 				<button class="btn variant-outline-primary mt-8 w-full" type="button" on:click={addStep}>
 					Add
 				</button>
