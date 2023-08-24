@@ -39,12 +39,7 @@
 	setContext('formData', formData);
 
 	let activeTab = 0;
-	const tabs = [
-		{ name: 'info', label: 'Info' },
-		{ name: 'items', label: 'Items' },
-		{ name: 'steps', label: 'Steps' },
-		{ name: 'preview', label: 'Preview' }
-	];
+	const tabs = ['Info', 'Items', 'Steps', 'Preview'];
 
 	function prevTab() {
 		if (activeTab === 0) return;
@@ -58,32 +53,50 @@
 
 <!-- <SuperDebug data={$form} /> -->
 
-<form method="POST" action={actionUrl} class="grid" use:enhance>
-	<TabGroup class="mb-8" regionPanel="grid gap-4" justify="justify-between">
-		{#each tabs as { name, label }, i}
-			<Tab bind:group={activeTab} {name} value={i}>{label}</Tab>
-		{/each}
-		<svelte:fragment slot="panel">
-			{#if activeTab === 0}
-				<RecipeFormInfo />
-			{:else if activeTab === 1}
-				<RecipeFormIngredients />
-			{:else if activeTab === 2}
-				<RecipeFormSteps />
-			{:else if activeTab === 3}
-				<RecipeFormPreview bind:imageFile bind:previousImage />
-			{/if}
-		</svelte:fragment>
-	</TabGroup>
-	<div class="grid grid-cols-2 gap-6 border-t-[1px] border-surface-500 pt-8">
+<header class="flex justify-around transition-all">
+	{#each tabs as tab, i}
+		<p
+			class="pb-2 w-full text-sm text-center text-surface-200"
+			class:text-surface-700={i > activeTab}
+			class:border-b-2={activeTab >= i}
+		>
+			{i + 1}.
+			{tab}
+		</p>
+	{/each}
+</header>
+<div class="grid md:grid-cols-3 md:gap-8">
+	<form class="md:col-span-2" method="POST" action={actionUrl} use:enhance>
+		<TabGroup
+			class="mb-8 md:col-span-2"
+			regionList="border-none"
+			regionPanel="grid gap-4"
+			justify="justify-between"
+		>
+			<svelte:fragment slot="panel">
+				{#if activeTab === 0}
+					<RecipeFormInfo />
+				{:else if activeTab === 1}
+					<RecipeFormIngredients />
+				{:else if activeTab === 2}
+					<RecipeFormSteps />
+				{:else if activeTab === 3}
+					<RecipeFormPreview bind:imageFile bind:previousImage />
+				{/if}
+			</svelte:fragment>
+		</TabGroup>
+	</form>
+	<div
+		class="grid grid-cols-2 md:grid-cols-1 md:place-content-start gap-6 border-t-[1px] border-surface-500 md:border-none pt-8 md:pt-6"
+	>
 		<button
 			disabled={activeTab === 0}
-			class="btn variant-filled-tertiary"
+			class="btn variant-outline-tertiary"
 			type="button"
 			on:click={prevTab}>Prev</button
 		>
 		{#if activeTab === tabs.length - 1}
-			<button class="btn variant-filled-primary" disabled={isUploading} type="submit">
+			<button class="btn variant-filled-primary md:-order-1" disabled={isUploading} type="submit">
 				{#if isUploading}
 					<ProgressRadial
 						stroke={120}
@@ -97,7 +110,9 @@
 				{/if}
 			</button>
 		{:else}
-			<button class="btn variant-filled-tertiary" type="button" on:click={nextTab}>Next</button>
+			<button class="btn variant-filled-tertiary md:-order-1" type="button" on:click={nextTab}
+				>Next</button
+			>
 		{/if}
 	</div>
-</form>
+</div>
