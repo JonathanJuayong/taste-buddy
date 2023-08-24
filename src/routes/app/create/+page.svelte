@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import RecipeForm from '$lib/components/RecipeForm.svelte';
+	import RecipeForm from '$lib/components/forms/RecipeForm.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 

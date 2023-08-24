@@ -7,9 +7,9 @@
 	import type { mainSchema } from '$lib/formSchema';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { ActionResult } from '@sveltejs/kit';
-	import UploadWidget from './UploadWidget.svelte';
+	import UploadWidget from '../UploadWidget.svelte';
 	import { focus, generateRandomId, moveItemTo } from '$lib/utils';
-	import SortableList from './SortableList.svelte';
+	import SortableList from '../SortableList.svelte';
 
 	export let formProp: SuperValidated<typeof mainSchema>;
 	export let actionUrl: string;

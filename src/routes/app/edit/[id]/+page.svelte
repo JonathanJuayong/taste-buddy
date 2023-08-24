@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
-	import RecipeForm from '$lib/components/RecipeForm.svelte';
+	import RecipeForm from '$lib/components/forms/RecipeForm.svelte';
 	import { goto } from '$app/navigation';
 	import { enhance } from '$app/forms';
 	import { toastStore } from '@skeletonlabs/skeleton';
