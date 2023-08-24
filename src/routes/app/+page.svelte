@@ -2,9 +2,14 @@
 	import type { PageData } from './$types';
 	import PlusIcon from '~icons/lucide/plus';
 	import RecipeCard from '$lib/components/RecipeCard.svelte';
+	import { setContext } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	export let data: PageData;
-	const { recipes } = data;
+	$: ({ recipes } = data);
+
+	const isLoading = writable(false);
+	setContext('isLoading', isLoading);
 </script>
 
 {#if recipes.length === 0}
@@ -16,7 +21,7 @@
 		</a>
 	</article>
 {:else}
-	<article class="grid sm:grid-cols-2 gap-6 items-center h-full">
+	<div class="grid sm:grid-cols-2 gap-6 items-center h-full">
 		<a
 			href="/app/create"
 			class="rounded-3xl max-w-4xl outline-dashed aspect-video outline-surface-400 relative overflow-hidden flex flex-col place-items-center place-content-center"
@@ -26,7 +31,7 @@
 		{#each recipes as recipe}
 			<RecipeCard {recipe} />
 		{/each}
-	</article>
+	</div>
 {/if}
 <a
 	href="/app/create"
