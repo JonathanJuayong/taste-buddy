@@ -1,12 +1,8 @@
 <script lang="ts">
-	import type { SuperForm } from 'sveltekit-superforms/client';
-	import LabeledInput from '../LabeledInput.svelte';
 	import { getContext } from 'svelte';
-	import type { ZodValidation } from 'sveltekit-superforms';
-	import type { mainSchema } from '$lib/formSchema';
 	import UploadWidget from '../UploadWidget.svelte';
+	import type { FormData } from '$lib/types';
 
-	type FormData = SuperForm<ZodValidation<typeof mainSchema>, unknown>;
 	const { form } = getContext<FormData>('formData');
 
 	export let imageFile: File | null;

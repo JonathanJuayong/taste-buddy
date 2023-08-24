@@ -3,11 +3,8 @@
 	import LabeledInput from '../LabeledInput.svelte';
 	import { focus } from '$lib/utils';
 	import XIcon from '~icons/lucide/x';
-	import type { ZodValidation } from 'sveltekit-superforms';
-	import type { mainSchema } from '$lib/formSchema';
-	import type { SuperForm } from 'sveltekit-superforms/client';
+	import type { FormData } from '$lib/types';
 
-	type FormData = SuperForm<ZodValidation<typeof mainSchema>, unknown>;
 	const { form, errors, constraints } = getContext<FormData>('formData');
 
 	function addIngredient() {
