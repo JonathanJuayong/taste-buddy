@@ -9,6 +9,13 @@
 	export let previousImage: string | null;
 </script>
 
+<section class="grid gap-4">
+	<h2 class="h2">Preview</h2>
+	<p>
+		Summary of everything you've written. Make sure to double-check the details! Don't forget to
+		include an image for your recipe
+	</p>
+</section>
 <UploadWidget
 	imageSrc={$form.image_src}
 	on:imageChange={(e) => {
