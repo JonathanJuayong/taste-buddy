@@ -65,27 +65,31 @@
 		</p>
 	{/each}
 </header>
-<div class="grid md:grid-cols-3 md:gap-8">
-	<form class="md:col-span-2" method="POST" action={actionUrl} use:enhance>
-		<TabGroup
-			class="mb-8 md:col-span-2"
-			regionList="border-none"
-			regionPanel="grid gap-4"
-			justify="justify-between"
-		>
-			<svelte:fragment slot="panel">
-				{#if activeTab === 0}
-					<RecipeFormInfo />
-				{:else if activeTab === 1}
-					<RecipeFormIngredients />
-				{:else if activeTab === 2}
-					<RecipeFormSteps />
-				{:else if activeTab === 3}
-					<RecipeFormPreview bind:imageFile bind:previousImage />
-				{/if}
-			</svelte:fragment>
-		</TabGroup>
-	</form>
+
+<form
+	class="md:col-span-2 grid md:grid-cols-3 md:gap-8"
+	method="POST"
+	action={actionUrl}
+	use:enhance
+>
+	<TabGroup
+		class="mb-8 md:col-span-2"
+		regionList="border-none"
+		regionPanel="grid gap-4"
+		justify="justify-between"
+	>
+		<svelte:fragment slot="panel">
+			{#if activeTab === 0}
+				<RecipeFormInfo />
+			{:else if activeTab === 1}
+				<RecipeFormIngredients />
+			{:else if activeTab === 2}
+				<RecipeFormSteps />
+			{:else if activeTab === 3}
+				<RecipeFormPreview bind:imageFile bind:previousImage />
+			{/if}
+		</svelte:fragment>
+	</TabGroup>
 	<div
 		class="grid grid-cols-2 md:grid-cols-1 md:place-content-start gap-6 border-t-[1px] border-surface-500 md:border-none pt-8 md:pt-6"
 	>
@@ -115,4 +119,4 @@
 			>
 		{/if}
 	</div>
-</div>
+</form>
