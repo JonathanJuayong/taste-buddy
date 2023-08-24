@@ -61,18 +61,5 @@ export const actions = {
 			console.log(e);
 			throw error(400, 'Shit hit the fan');
 		}
-	},
-	delete: async ({ params, request, fetch }) => {
-		const { id } = params;
-		deleteRecipe(Number(id));
-		const formData = await request.formData();
-
-		try {
-			await fetch('/api/images', { method: 'DELETE', body: formData });
-		} catch (e) {
-			console.log(e);
-		}
-
-		throw redirect(302, '/app');
 	}
 };
