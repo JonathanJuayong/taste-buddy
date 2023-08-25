@@ -51,11 +51,12 @@ export const actions = {
 				const { public_id } = (await req.json()) as { public_id: string };
 
 				// replace old with new image in db
-				const newRecipe: MainSchema = { ...form.data, image_src: public_id ?? form.data.image_src };
-				updateRecipe(Number(newRecipe.id), newRecipe);
+				const { data } = form;
+				data.image_src = public_id ?? data.image_src;
+				updateRecipe(Number(data.id), data);
 			} else {
-				const newRecipe = form.data;
-				updateRecipe(Number(newRecipe.id), newRecipe);
+				const { data } = form;
+				updateRecipe(Number(data.id), data);
 			}
 		} catch (e) {
 			throw error(400, `Something went wrong: ${e}`);
