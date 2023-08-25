@@ -12,14 +12,14 @@
 <RecipeForm
 	formProp={data.form}
 	actionUrl={$page.url.pathname}
-	onResult={({ result }) => {
+	onResult={async ({ result }) => {
 		if (result.type === 'error') {
-			applyAction(result);
 			toastStore.trigger({
 				message:
 					'Something went wrong while creating the recipe. Please try again or double-check your internet connection.'
 			});
-			goto('/app');
 		}
+		applyAction(result);
+		await goto('/app');
 	}}
 />
