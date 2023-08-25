@@ -4,8 +4,11 @@
 	import RecipeCard from '$lib/components/RecipeCard.svelte';
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 
 	export let data: PageData;
+	let toggleDelete = false;
+
 	$: ({ recipes } = data);
 
 	const isLoading = writable(false);
@@ -21,7 +24,10 @@
 		</a>
 	</article>
 {:else}
-	<div class="grid sm:grid-cols-2 gap-6">
+	<SlideToggle size="sm" name="toggle delete" bind:checked={toggleDelete}>
+		Toggle Delete
+	</SlideToggle>
+	<div class="grid sm:grid-cols-2 gap-6 mt-6">
 		<a
 			href="/app/create"
 			class="rounded-3xl max-w-4xl outline-dashed aspect-video outline-surface-400 relative overflow-hidden flex flex-col place-items-center place-content-center"
@@ -29,7 +35,7 @@
 			Create a new recipe +
 		</a>
 		{#each recipes as recipe (recipe.id)}
-			<RecipeCard {recipe} />
+			<RecipeCard {toggleDelete} {recipe} />
 		{/each}
 	</div>
 {/if}

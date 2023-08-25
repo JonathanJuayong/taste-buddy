@@ -9,6 +9,7 @@
 	import XIcon from '~icons/lucide/x';
 
 	export let recipe: RecipeCard;
+	export let toggleDelete: boolean;
 
 	const isLoading = getContext<Writable<boolean>>('isLoading');
 	const { name, image_src: src, id } = recipe;
@@ -59,21 +60,23 @@
 		/>
 		<p class="absolute bottom-5 left-5 h3 font-bold">{name}</p>
 	</a>
-	<button
-		disabled={$isLoading}
-		on:click={onDeleteHandler(recipe.id)}
-		class="btn-icon variant-filled-error absolute top-4 right-4"
-		aria-label="delete recipe"
-	>
-		{#if $isLoading}
-			<ProgressRadial
-				stroke={100}
-				width="w-6"
-				meter="stroke-surface-500"
-				track="stroke-surface-500/30"
-			/>
-		{:else}
-			<XIcon class="text-error-200" />
-		{/if}
-	</button>
+	{#if toggleDelete}
+		<button
+			disabled={$isLoading}
+			on:click={onDeleteHandler(recipe.id)}
+			class="btn-icon variant-filled-error absolute top-4 right-4"
+			aria-label="delete recipe"
+		>
+			{#if $isLoading}
+				<ProgressRadial
+					stroke={100}
+					width="w-6"
+					meter="stroke-surface-500"
+					track="stroke-surface-500/30"
+				/>
+			{:else}
+				<XIcon class="text-error-200" />
+			{/if}
+		</button>
+	{/if}
 </article>
