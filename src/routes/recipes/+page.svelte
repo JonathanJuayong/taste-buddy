@@ -12,19 +12,23 @@
 	$: ({ recipes, lastSeenId, resultsPerPage, isLastPage } = data);
 
 	let searchQuery: string;
-
 	let isLoading = false;
+	let href = '';
 
 	$: idForFetchingNewRecipes = lastSeenId;
 	$: continueFetching = !isLastPage;
 	$: recipesFetched = recipes;
-	$: href = $page.url.searchParams.get('search')
-		? `${$page.url.pathname}?search=${searchQuery}&items=${
-				recipesFetched.length + resultsPerPage
-		  }&id=${(recipesFetched.at(0)?.id ?? 0) + 1}`
-		: `${$page.url.pathname}?items=${recipesFetched.length + resultsPerPage}&id=${
-				(recipesFetched.at(0)?.id ?? 0) + 1
-		  }`;
+
+	// generate href to keep track of recipes already fetched in the url
+	function generateHref() {
+		const withSearch = $page.url.searchParams.get('search');
+		const pathname = $page.url.pathname;
+		const search = withSearch ? `&search=${searchQuery}` : '';
+		const items = `items=${recipesFetched.length}`;
+		const id = `id=${(recipesFetched.at(0)?.id ?? 0) + 1}`;
+
+		href = `${pathname}?&${items}&${id}${search}`;
+	}
 
 	function fetchMoreRecipes(searchQuery: string, lastSeenId: number, resultsPerPage: number) {
 		isLoading = true;
@@ -54,6 +58,7 @@
 				idForFetchingNewRecipes = data.lastId;
 				recipesFetched = [...recipesFetched, ...data.recipes];
 
+				generateHref();
 				window.history.pushState({ path: $page.url.pathname }, '', href);
 			} catch (error) {
 				console.log(error);
