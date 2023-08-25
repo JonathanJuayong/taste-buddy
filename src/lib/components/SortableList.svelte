@@ -19,6 +19,8 @@
 {#each itemListWithId as item, i (item.id)}
 	<div
 		animate:flip={{ duration: 100 }}
+		class:z-10={activeIndex === i}
+		class:shadow-xl={activeIndex === i}
 		use:draggable={{
 			bounds: {
 				left: 20,
