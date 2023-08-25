@@ -20,6 +20,9 @@
 			});
 		}
 		applyAction(result);
+		toastStore.trigger({
+			message: 'Successfully created recipe!'
+		});
 		await goto('/app');
 	}}
 />
