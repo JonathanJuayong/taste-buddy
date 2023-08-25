@@ -67,6 +67,7 @@
 </header>
 
 <form
+	enctype="multipart/form-data"
 	class="md:col-span-2 grid md:grid-cols-3 md:gap-8"
 	method="POST"
 	action={actionUrl}
