@@ -1,4 +1,4 @@
-import { deleteRecipe, getRecipeById, updateRecipe } from '$lib/server/db';
+import { getRecipeById, updateRecipe } from '$lib/server/db';
 import { superValidate } from 'sveltekit-superforms/client';
 import type { PageServerLoad } from './$types';
 import { mainSchema, type MainSchema } from '$lib/formSchema';
@@ -38,7 +38,7 @@ export const actions = {
 
 			const form = await superValidate(request.clone(), mainSchema);
 
-			if (file) {
+			if (file && file.size > 0) {
 				const formData = new FormData();
 				formData.append('file', file);
 				formData.append('publicId', previousImage ?? '');
@@ -58,8 +58,7 @@ export const actions = {
 				updateRecipe(Number(newRecipe.id), newRecipe);
 			}
 		} catch (e) {
-			console.log(e);
-			throw error(400, 'Shit hit the fan');
+			throw error(400, `Something went wrong: ${e}`);
 		}
 	}
 };
