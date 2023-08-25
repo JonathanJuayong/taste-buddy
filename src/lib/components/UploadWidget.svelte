@@ -1,33 +1,26 @@
 <script lang="ts">
-	import { ConicGradient, FileDropzone, type ConicStop } from '@skeletonlabs/skeleton';
-	import { CldImage } from 'svelte-cloudinary';
+	import { FileButton } from '@skeletonlabs/skeleton';
 	import { createEventDispatcher } from 'svelte';
+	import { CldImage } from 'svelte-cloudinary';
 	import UploadIcon from '~icons/mdi/upload';
 
 	let files: FileList;
 	let Preview: HTMLImageElement | null = null;
 	let error: string | null;
-	let allowUpload = false;
-	let isUploading = false;
 	export let imageSrc: string | null = null;
 
 	const dispatch = createEventDispatcher();
-	const conicStops: ConicStop[] = [
-		{ color: 'transparent', start: 0, end: 25 },
-		{ color: 'rgb(var(--color-primary-500))', start: 75, end: 100 }
-	];
 
 	async function onChangeHandler(e: Event) {
 		error = null;
 		const file = (e.target as HTMLInputElement).files?.[0];
 		if (file) {
+			dispatch('imageChange', file);
 			Preview = new Image();
 			Preview.onerror = () => {
 				error = `${file.name} cannot be loaded as image. Please double-check the file type.`;
 			};
-			allowUpload = false;
 			Preview.src = URL.createObjectURL(file);
-			dispatch('imageChange', file);
 		}
 	}
 </script>
@@ -41,56 +34,29 @@
 		<p class="text-error-900">{error}</p>
 	{/if}
 
-	{#if imageSrc && !Preview && allowUpload === false}
+	{#if !Preview}
 		<CldImage
 			class="mb-4"
 			height=""
-			width="1000"
+			width="900"
 			alt="preview"
 			aspectRatio={16 / 9}
-			src={imageSrc}
+			src={imageSrc ?? ''}
 		/>
 	{/if}
 
-	{#if Preview && !error && allowUpload === false}
+	{#if Preview && !error}
 		<div class="grid place-items-center">
-			<img src={Preview.src} alt="preview" />
+			<img class="aspect-video w-full object-contain" src={Preview.src} alt="preview" />
 		</div>
 	{/if}
 
-	{#if isUploading}
-		<ConicGradient stops={conicStops} class="ml-2" width="w-6" spin />
-	{/if}
-
-	{#if allowUpload === false}
-		{#if Preview && !error}
-			<div class="flex">
-				<button
-					disabled={isUploading}
-					type="button"
-					class="btn variant-outline-surface w-full"
-					on:click={() => {
-						allowUpload = true;
-					}}
-				>
-					Change Image
-				</button>
-			</div>
-		{:else}
-			<button
-				disabled={isUploading}
-				type="button"
-				class="btn variant-outline-surface w-full"
-				on:click={() => (allowUpload = true)}
-			>
-				{imageSrc ? 'Change Image' : 'Upload Image'}
-			</button>
-		{/if}
-	{/if}
-
-	{#if allowUpload}
-		<FileDropzone name="file" bind:files on:change={onChangeHandler}>
-			<svelte:fragment slot="lead"><UploadIcon class="mx-auto" /></svelte:fragment>
-		</FileDropzone>
-	{/if}
+	<FileButton
+		button="variant-outline-secondary w-full"
+		name="file"
+		bind:files
+		on:change={onChangeHandler}
+	>
+		Upload an image <UploadIcon class="ml-2" />
+	</FileButton>
 </div>

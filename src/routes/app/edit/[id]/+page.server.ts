@@ -1,4 +1,4 @@
-import { deleteRecipe, getRecipeById, updateRecipe } from '$lib/server/db';
+import { getRecipeById, updateRecipe } from '$lib/server/db';
 import { superValidate } from 'sveltekit-superforms/client';
 import type { PageServerLoad } from './$types';
 import { mainSchema, type MainSchema } from '$lib/formSchema';
@@ -38,7 +38,7 @@ export const actions = {
 
 			const form = await superValidate(request.clone(), mainSchema);
 
-			if (file) {
+			if (file && file.size > 0) {
 				const formData = new FormData();
 				formData.append('file', file);
 				formData.append('publicId', previousImage ?? '');
@@ -51,28 +51,15 @@ export const actions = {
 				const { public_id } = (await req.json()) as { public_id: string };
 
 				// replace old with new image in db
-				const newRecipe: MainSchema = { ...form.data, image_src: public_id ?? form.data.image_src };
-				updateRecipe(Number(newRecipe.id), newRecipe);
+				const { data } = form;
+				data.image_src = public_id ?? data.image_src;
+				updateRecipe(Number(data.id), data);
 			} else {
-				const newRecipe = form.data;
-				updateRecipe(Number(newRecipe.id), newRecipe);
+				const { data } = form;
+				updateRecipe(Number(data.id), data);
 			}
 		} catch (e) {
-			console.log(e);
-			throw error(400, 'Shit hit the fan');
+			throw error(400, `Something went wrong: ${e}`);
 		}
-	},
-	delete: async ({ params, request, fetch }) => {
-		const { id } = params;
-		deleteRecipe(Number(id));
-		const formData = await request.formData();
-
-		try {
-			await fetch('/api/images', { method: 'DELETE', body: formData });
-		} catch (e) {
-			console.log(e);
-		}
-
-		throw redirect(302, '/app');
 	}
 };

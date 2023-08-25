@@ -26,14 +26,16 @@ export const actions = {
 
 			const form = await superValidate(request.clone(), mainSchema);
 
+			// upload image to cloudinary
 			const formData = await request.clone().formData();
-
 			const req = await fetch('/api/images', { method: 'POST', body: formData });
 			const { public_id } = (await req.json()) as { public_id: string };
 
-			const updatedRecipe: MainSchema = { ...form.data, image_src: public_id };
+			// update image_src with public_id
+			form.data.image_src = public_id;
 
-			await addRecipe(updatedRecipe, uid);
+			// create recipe
+			await addRecipe(form.data, uid);
 
 			return { form };
 		} catch (e) {

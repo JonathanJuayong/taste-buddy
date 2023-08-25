@@ -35,6 +35,12 @@
 	function openDrawer() {
 		drawerStore.open(drawerSettings);
 	}
+
+	$: navLinks = [
+		{ label: 'App', href: '/app' },
+		{ label: 'Recipes', href: '/recipes' },
+		{ label: uid ? 'Sign out' : 'Sign in', href: '/signin' }
+	];
 </script>
 
 <Modal />
@@ -48,36 +54,18 @@
 	}}
 >
 	<ul class="space-y-5">
-		<li>
-			<a
-				class="text-2xl"
-				class:underline={$page.url.pathname.includes('app')}
-				class:underline-offset-4={$page.url.pathname.includes('app')}
-				href="/app">App</a
-			>
-		</li>
-		<li>
-			<a
-				class="text-2xl"
-				class:underline={$page.url.pathname.includes('recipes')}
-				class:underline-offset-4={$page.url.pathname.includes('recipes')}
-				href="/recipes">Recipes</a
-			>
-		</li>
-		<li>
-			<a
-				class="text-2xl"
-				class:underline={$page.url.pathname.includes('signin')}
-				class:underline-offset-4={$page.url.pathname.includes('signin')}
-				href="/signin"
-			>
-				{#if uid}
-					Sign out
-				{:else}
-					Sign in
-				{/if}
-			</a>
-		</li>
+		{#each navLinks as { label, href }}
+			<li>
+				<a
+					{href}
+					class="text-2xl"
+					class:underline={$page.url.pathname.includes(href)}
+					class:underline-offset-4={$page.url.pathname.includes(href)}
+				>
+					{label}
+				</a>
+			</li>
+		{/each}
 		{#if uid}
 			<li>
 				<a class="text-2xl" href="/app/create">Create</a>
@@ -105,33 +93,15 @@
 	<nav class="sm:flex items-center justify-between py-6 mb-6 hidden">
 		<p class="font-extrabold">Taste Buddy</p>
 		<ul class="flex gap-6 items-center transition-all">
-			<li>
+			{#each navLinks as { label, href }}
 				<a
-					class:underline={$page.url.pathname.includes('app')}
-					class:underline-offset-4={$page.url.pathname.includes('app')}
-					href="/app">App</a
+					class:underline={$page.url.pathname.includes(href)}
+					class:underline-offset-4={$page.url.pathname.includes(href)}
+					{href}
 				>
-			</li>
-			<li>
-				<a
-					class:underline={$page.url.pathname.includes('recipes')}
-					class:underline-offset-4={$page.url.pathname.includes('recipes')}
-					href="/recipes">Recipes</a
-				>
-			</li>
-			<li>
-				<a
-					href="signin"
-					class:underline={$page.url.pathname.includes('signin')}
-					class:underline-offset-4={$page.url.pathname.includes('signin')}
-				>
-					{#if uid}
-						Sign out
-					{:else}
-						Sign in
-					{/if}
+					{label}
 				</a>
-			</li>
+			{/each}
 			{#if uid}
 				<li class="variant-outline-primary btn btn-sm">
 					<a class="text-primary-700" href="/app/create"> Create </a>

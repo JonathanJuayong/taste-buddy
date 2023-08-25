@@ -7,42 +7,40 @@
 	<title>App | Taste Buddy</title>
 </svelte:head>
 
-<main class="flex flex-col h-full">
-	<div class="flex-grow pb-6 mb-12 relative">
-		<ul class="breadcrumb-nonresponsive mb-6">
-			{#if $page.url.pathname === '/app'}
-				<li>
-					<p class="flex items-center">
-						<HomeIcon class="mr-2" />
-						Home
-					</p>
-				</li>
-			{:else}
-				<li class="crumb">
-					<a href="/app" class="anchor flex items-center">
-						<HomeIcon class="mr-2" />
-						Home
-					</a>
-				</li>
-			{/if}
-			{#if $page.url.pathname.includes('/create')}
-				<li class="crumb-separator">
-					{'>'}
-				</li>
-				<li class="crumb">
-					<p>Create</p>
-				</li>
-			{/if}
-			{#if $page.url.pathname.includes('/edit')}
-				<li class="crumb-separator">
-					{'>'}
-				</li>
-				<li class="crumb">
-					<p>Recipe</p>
-				</li>
-			{/if}
-			<li />
-		</ul>
-		<slot />
-	</div>
+<main class="flex flex-col h-full relative">
+	<ul class="breadcrumb-nonresponsive mb-6">
+		{#if $page.url.pathname === '/app'}
+			<li>
+				<p class="flex items-center">
+					<HomeIcon class="mr-2" />
+					Home
+				</p>
+			</li>
+		{:else}
+			<li class="crumb">
+				<a href="/app" class="anchor flex items-center">
+					<HomeIcon class="mr-2" />
+					Home
+				</a>
+			</li>
+		{/if}
+		{#if $page.url.pathname.includes('/create')}
+			<li class="crumb-separator">
+				{'>'}
+			</li>
+			<li class="crumb">
+				<p>Create</p>
+			</li>
+		{/if}
+		{#if $page.url.pathname.includes('/edit')}
+			<li class="crumb-separator">
+				{'>'}
+			</li>
+			<li class="crumb">
+				<p>Recipe</p>
+			</li>
+		{/if}
+		<li />
+	</ul>
+	<slot />
 </main>

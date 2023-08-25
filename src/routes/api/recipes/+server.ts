@@ -1,5 +1,5 @@
-import { searchRecipesByNamePaginated } from '$lib/server/db';
-import { json } from '@sveltejs/kit';
+import { deleteRecipe, searchRecipesByNamePaginated } from '$lib/server/db';
+import { json, redirect } from '@sveltejs/kit';
 
 export const POST = async ({ request }) => {
 	const { searchQuery, lastSeenId, resultsPerPage } = (await request.json()) as {
@@ -32,4 +32,18 @@ export const POST = async ({ request }) => {
 		isLastPage: false,
 		lastId
 	});
+};
+
+export const DELETE = async ({ request, fetch }) => {
+	const formData = await request.formData();
+	const id = formData.get('id') as string | null;
+	deleteRecipe(Number(id));
+
+	try {
+		await fetch('/api/images', { method: 'DELETE', body: formData });
+	} catch (e) {
+		console.log(e);
+	}
+
+	throw redirect(302, '/app');
 };
