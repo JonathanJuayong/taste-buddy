@@ -28,7 +28,7 @@
 		>
 			Create a new recipe +
 		</a>
-		{#each recipes as recipe}
+		{#each recipes as recipe (recipe.id)}
 			<RecipeCard {recipe} />
 		{/each}
 	</div>
