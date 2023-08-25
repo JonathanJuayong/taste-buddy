@@ -21,7 +21,7 @@
 		</a>
 	</article>
 {:else}
-	<div class="grid sm:grid-cols-2 gap-6 items-center h-full">
+	<div class="grid sm:grid-cols-2 gap-6">
 		<a
 			href="/app/create"
 			class="rounded-3xl max-w-4xl outline-dashed aspect-video outline-surface-400 relative overflow-hidden flex flex-col place-items-center place-content-center"
