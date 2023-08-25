@@ -2,10 +2,10 @@
 	import RecipePreview from '$lib/components/RecipePreview.svelte';
 	import type { PageData } from './$types';
 	import RefreshIcon from '~icons/lucide/refresh-cw';
-	import SearchIcon from '~icons/lucide/search';
 	import { page } from '$app/stores';
 	import type { MainSchema } from '$lib/formSchema';
 	import { ProgressRadial, toastStore } from '@skeletonlabs/skeleton';
+	import SearchBar from '$lib/components/SearchBar.svelte';
 
 	export let data: PageData;
 
@@ -72,23 +72,8 @@
 	}
 </script>
 
-<form method="get" action={$page.url.pathname} class="mb-6 flex gap-2 items-end">
-	<label class="flex-1">
-		<span class="ml-2 my-2 inline-block uppercase font-bold text-secondary-500 opacity-50 text-sm">
-			Search Recipes
-		</span>
-		<input
-			name="search"
-			bind:value={searchQuery}
-			placeholder="Type a recipe name here"
-			class="input"
-			type="text"
-		/>
-	</label>
-	<button class="btn-icon variant-filled-primary" aria-label="search button">
-		<SearchIcon />
-	</button>
-</form>
+<SearchBar bind:value={searchQuery} action={$page.url.pathname} />
+
 <a href="/recipes" data-sveltekit-reload class="btn w-full variant-ringed-primary mb-6">
 	Get Latest Recipes <RefreshIcon class="ml-2" />
 </a>
