@@ -35,6 +35,7 @@
 				});
 
 				invalidateAll();
+				$isLoading = false;
 				toastStore.trigger({
 					message: 'Recipe has been successfully deleted'
 				});
