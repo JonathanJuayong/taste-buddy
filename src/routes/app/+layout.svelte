@@ -7,7 +7,7 @@
 	<title>App | Taste Buddy</title>
 </svelte:head>
 
-<main class="flex flex-col h-full pb-6 mb-12 relative">
+<main class="flex flex-col h-full relative">
 	<ul class="breadcrumb-nonresponsive mb-6">
 		{#if $page.url.pathname === '/app'}
 			<li>
