@@ -3,8 +3,23 @@
 	import RecipeForm from '$lib/components/forms/RecipeForm.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { applyAction } from '$app/forms';
+	import { toastStore } from '@skeletonlabs/skeleton';
 
 	export let data: PageData;
 </script>
 
-<RecipeForm formProp={data.form} actionUrl={$page.url.pathname} onResult={() => goto('/app')} />
+<RecipeForm
+	formProp={data.form}
+	actionUrl={$page.url.pathname}
+	onResult={({ result }) => {
+		if (result.type === 'error') {
+			applyAction(result);
+			toastStore.trigger({
+				message:
+					'Something went wrong while creating the recipe. Please try again or double-check your internet connection.'
+			});
+			goto('/app');
+		}
+	}}
+/>
