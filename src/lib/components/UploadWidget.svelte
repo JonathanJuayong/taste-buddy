@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { FileButton } from '@skeletonlabs/skeleton';
+	import { createEventDispatcher } from 'svelte';
 	import { CldImage } from 'svelte-cloudinary';
 	import UploadIcon from '~icons/mdi/upload';
 
@@ -8,10 +9,13 @@
 	let error: string | null;
 	export let imageSrc: string | null = null;
 
+	const dispatch = createEventDispatcher();
+
 	async function onChangeHandler(e: Event) {
 		error = null;
 		const file = (e.target as HTMLInputElement).files?.[0];
 		if (file) {
+			dispatch('imageChange', file);
 			Preview = new Image();
 			Preview.onerror = () => {
 				error = `${file.name} cannot be loaded as image. Please double-check the file type.`;
