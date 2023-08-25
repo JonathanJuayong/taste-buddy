@@ -49,6 +49,23 @@ export const createUser = async (id: string) => await sql`INSERT INTO user_ (id)
 export const getRecipesByUser = async (id: string) =>
 	await sql<MainSchema[]>`SELECT * FROM recipe_ WHERE author_id = ${id}`;
 
+export const getRecipesByNameByUserPaginated = async (
+	authorId: string,
+	search: string,
+	resultsPerPage: number,
+	lastSeenId: number
+) => {
+	const string = `%${search}%`;
+	return await sql<MainSchema[]>`
+    SELECT * FROM recipe_
+      WHERE author_id = ${authorId}
+        AND name ILIKE ${string}
+        AND id < ${lastSeenId}
+      ORDER BY id DESC
+      FETCH FIRST ${resultsPerPage} ROWS ONLY
+  `;
+};
+
 export const getRecipeById = async (
 	id: number
 ): Promise<(MainSchema & { author_id: string }) | null> => {
