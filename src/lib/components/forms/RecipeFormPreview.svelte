@@ -23,7 +23,7 @@
 		previousImage = $form.image_src;
 	}}
 />
-<div class="mb-6">
+<section class="mb-6">
 	<h2 class="h2 mb-2">{$form.name}</h2>
 	<p>{$form.description}</p>
 	<ul class="flex gap-4 text-xs">
@@ -31,7 +31,7 @@
 		<li class="border-r-[1px] pr-4">Cook: {$form.cook_time} mins</li>
 		<li>Prep: {$form.prep_time} mins</li>
 	</ul>
-</div>
+</section>
 <section class="mb-6">
 	<h3 class="h3">Ingredients</h3>
 	<ul>

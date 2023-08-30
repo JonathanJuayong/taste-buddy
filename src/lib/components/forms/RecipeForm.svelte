@@ -1,23 +1,19 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms/client';
-	import { ProgressRadial, Tab, TabGroup } from '@skeletonlabs/skeleton';
+	import { ProgressRadial, Tab, TabGroup, toastStore } from '@skeletonlabs/skeleton';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-	import type { mainSchema } from '$lib/formSchema';
-	import type { SuperValidated, ZodValidation } from 'sveltekit-superforms';
-	import type { ActionResult } from '@sveltejs/kit';
+	import type { SuperValidated } from 'sveltekit-superforms';
 	import RecipeFormInfo from './RecipeFormInfo.svelte';
 	import { setContext } from 'svelte';
 	import RecipeFormIngredients from './RecipeFormIngredients.svelte';
 	import RecipeFormSteps from './RecipeFormSteps.svelte';
 	import RecipeFormPreview from './RecipeFormPreview.svelte';
+	import { mainSchema } from '$lib/formSchema';
+	import { goto } from '$app/navigation';
 
 	export let formProp: SuperValidated<typeof mainSchema>;
 	export let actionUrl: string;
-	export let onResult: (event: {
-		result: ActionResult;
-		formEl: HTMLFormElement;
-		cancel: () => void;
-	}) => void;
+	export let redirectUrl: string;
 
 	let imageFile: File | null;
 	let isUploading = false;
@@ -25,6 +21,8 @@
 
 	const formData = superForm(formProp, {
 		dataType: 'json',
+		validationMethod: 'oninput',
+		validators: mainSchema,
 		onSubmit: ({ formData }) => {
 			isUploading = true;
 			if (imageFile) {
@@ -32,8 +30,36 @@
 				formData.append('previousImage', previousImage ?? '');
 			}
 		},
-		onResult
+		onResult: async (data) => {
+			const {
+				result: { type }
+			} = data;
+			isUploading = false;
+			if (type === 'failure') {
+				toastStore.trigger({
+					message:
+						'Something went wrong when submitting your data. Please double check the information submitted and try again.',
+					background: 'variant-filled-error'
+				});
+			}
+
+			if (type === 'success') {
+				toastStore.trigger({
+					message: 'Data was submitted successfully!'
+				});
+				await goto(redirectUrl);
+			}
+		},
+		onError: () => {
+			toastStore.trigger({
+				message:
+					'There was an error with the data submitted for this recipe. Please double check the information submitted and try again.',
+				background: 'variant-filled-error'
+			});
+			isUploading = false;
+		}
 	});
+
 	const { enhance } = formData;
 
 	setContext('formData', formData);

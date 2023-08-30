@@ -1,28 +1,20 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 	import RecipeForm from '$lib/components/forms/RecipeForm.svelte';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { applyAction } from '$app/forms';
 	import { toastStore } from '@skeletonlabs/skeleton';
 
 	export let data: PageData;
-</script>
+	export let form: ActionData;
 
-<RecipeForm
-	formProp={data.form}
-	actionUrl={$page.url.pathname}
-	onResult={async ({ result }) => {
-		if (result.type === 'error') {
+	$: {
+		if (form?.error) {
 			toastStore.trigger({
-				message:
-					'Something went wrong while creating the recipe. Please try again or double-check your internet connection.'
+				message: form.error,
+				background: 'variant-filled-error'
 			});
 		}
-		applyAction(result);
-		toastStore.trigger({
-			message: 'Successfully created recipe!'
-		});
-		await goto('/app');
-	}}
-/>
+	}
+</script>
+
+<RecipeForm formProp={data.form} actionUrl={$page.url.pathname} redirectUrl="/app" />

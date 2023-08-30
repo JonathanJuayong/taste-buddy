@@ -1,6 +1,6 @@
 import { mainSchema, type MainSchema } from '$lib/formSchema';
 import { addRecipe } from '$lib/server/db';
-import { error, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
 import { createTemporaryRedirectCookie } from '$lib/server/helpers';
@@ -25,6 +25,21 @@ export const actions = {
 			if (!uid) throw error(400, 'Cannot create recipe without author');
 
 			const form = await superValidate(request.clone(), mainSchema);
+
+			const { valid } = form;
+			if (!valid) {
+				throw error(400, 'Invalid data submitted');
+			}
+
+			// check if file is uploaded
+			const file = (await request.clone().formData()).get('file') as File | null;
+			const fileExists = file?.size !== 0;
+			if (!fileExists) {
+				return fail(400, {
+					form,
+					error: 'No image attached. Please upload an image for your recipe'
+				});
+			}
 
 			// upload image to cloudinary
 			const formData = await request.clone().formData();
