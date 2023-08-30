@@ -38,7 +38,8 @@
 			if (type === 'failure') {
 				toastStore.trigger({
 					message:
-						'Something went wrong when submitting your data. Please try again or double check your internet connection'
+						'Something went wrong when submitting your data. Please double check the information submitted and try again.',
+					background: 'variant-filled-error'
 				});
 			}
 
@@ -52,7 +53,7 @@
 		onError: () => {
 			toastStore.trigger({
 				message:
-					'There was an error with the data submitted for this recipe. Please double the information submitted and try again.',
+					'There was an error with the data submitted for this recipe. Please double check the information submitted and try again.',
 				background: 'variant-filled-error'
 			});
 			isUploading = false;
