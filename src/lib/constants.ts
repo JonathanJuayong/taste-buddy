@@ -19,5 +19,5 @@ export const MAX_NUMBER_COOK_TIME = 1_000;
 export const MIN_NUMBER_PREP_TIME = 1;
 export const MAX_NUMBER_PREP_TIME = 1_000;
 
-export const MAX_NUMBER_INGREDIENTS = 5;
-export const MAX_NUMBER_STEPS = 5;
+export const MAX_NUMBER_INGREDIENTS = 100;
+export const MAX_NUMBER_STEPS = 100;
