@@ -1,7 +1,7 @@
 import { getRecipeById, updateRecipe } from '$lib/server/db';
 import { superValidate } from 'sveltekit-superforms/client';
 import type { PageServerLoad } from './$types';
-import { mainSchema, type MainSchema } from '$lib/formSchema';
+import { mainSchema } from '$lib/formSchema';
 import { error, redirect } from '@sveltejs/kit';
 import { createTemporaryRedirectCookie } from '$lib/server/helpers';
 
@@ -37,6 +37,10 @@ export const actions = {
 			const previousImage = data.get('previousImage') as string | null;
 
 			const form = await superValidate(request.clone(), mainSchema);
+
+			if (!form.valid) {
+				throw error(400, 'Invalid data submitted');
+			}
 
 			if (file && file.size > 0) {
 				const formData = new FormData();

@@ -26,6 +26,11 @@ export const actions = {
 
 			const form = await superValidate(request.clone(), mainSchema);
 
+			const { valid } = form;
+			if (!valid) {
+				throw error(400, 'Invalid data submitted');
+			}
+
 			// upload image to cloudinary
 			const formData = await request.clone().formData();
 			const req = await fetch('/api/images', { method: 'POST', body: formData });
