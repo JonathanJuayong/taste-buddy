@@ -2,13 +2,13 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { ProgressRadial, Tab, TabGroup, toastStore } from '@skeletonlabs/skeleton';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-	import type { SuperValidated, ZodValidation } from 'sveltekit-superforms';
+	import type { SuperValidated } from 'sveltekit-superforms';
 	import RecipeFormInfo from './RecipeFormInfo.svelte';
 	import { setContext } from 'svelte';
 	import RecipeFormIngredients from './RecipeFormIngredients.svelte';
 	import RecipeFormSteps from './RecipeFormSteps.svelte';
 	import RecipeFormPreview from './RecipeFormPreview.svelte';
-	import type { mainSchema } from '$lib/formSchema';
+	import { mainSchema } from '$lib/formSchema';
 	import { goto } from '$app/navigation';
 
 	export let formProp: SuperValidated<typeof mainSchema>;
@@ -21,6 +21,8 @@
 
 	const formData = superForm(formProp, {
 		dataType: 'json',
+		validationMethod: 'oninput',
+		validators: mainSchema,
 		onSubmit: ({ formData }) => {
 			isUploading = true;
 			if (imageFile) {
@@ -32,6 +34,7 @@
 			const {
 				result: { type }
 			} = data;
+			isUploading = false;
 			if (type === 'failure') {
 				toastStore.trigger({
 					message:
@@ -55,6 +58,7 @@
 			isUploading = false;
 		}
 	});
+
 	const { enhance } = formData;
 
 	setContext('formData', formData);
