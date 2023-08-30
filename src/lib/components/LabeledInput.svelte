@@ -29,5 +29,5 @@
 			{...$$restProps}
 		/>
 	{/if}
+	{#if error}<span class="text-error-700 inline-block ml-2">{error}</span>{/if}
 </label>
-{#if error}<span class="invalid">{error}</span>{/if}
