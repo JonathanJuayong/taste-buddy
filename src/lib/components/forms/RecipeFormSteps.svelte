@@ -47,7 +47,7 @@
 						name="steps"
 						label={`Step #${i + 1}`}
 						type="text"
-						error={$errors.steps?.[i].step}
+						error={$errors.steps?.[i]?.step}
 						bind:value={$form.steps[i].step}
 						{...$constraints.steps}
 					/>

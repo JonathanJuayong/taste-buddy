@@ -31,14 +31,14 @@
 				<LabeledInput
 					name="qty"
 					type="number"
-					error={$errors.ingredients?.[i].qty}
+					error={$errors.ingredients?.[i]?.qty}
 					bind:value={$form.ingredients[i].qty}
 					{...$constraints.ingredients?.qty}
 				/>
 				<LabeledInput
 					name="unit"
 					type="text"
-					error={$errors.ingredients?.[i].unit}
+					error={$errors.ingredients?.[i]?.unit}
 					bind:value={$form.ingredients[i].unit}
 					{...$constraints.ingredients?.unit}
 				/>
@@ -46,7 +46,7 @@
 					<LabeledInput
 						name="item"
 						type="text"
-						error={$errors.ingredients?.[i].item}
+						error={$errors.ingredients?.[i]?.item}
 						bind:value={$form.ingredients[i].item}
 						{...$constraints.ingredients?.item}
 					/>
