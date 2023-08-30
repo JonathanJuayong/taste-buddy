@@ -6,6 +6,7 @@
 	import XIcon from '~icons/lucide/x';
 	import HandleIcon from '~icons/radix-icons/drag-handle-dots-2';
 	import type { FormData } from '$lib/types';
+	import { MAX_NUMBER_STEPS } from '$lib/constants';
 
 	const { form, errors, constraints } = getContext<FormData>('formData');
 
@@ -15,6 +16,8 @@
 	function removeStep(index: number) {
 		return () => ($form.steps = $form.steps.filter((_, i) => i !== index));
 	}
+
+	$: addBtnIsShown = $form.steps.length < MAX_NUMBER_STEPS;
 
 	$: deleteStepBtnIsShown = $form.steps.length > 1;
 </script>
@@ -57,7 +60,9 @@
 			</div>
 		</SortableList>
 	</div>
-	<button class="btn variant-outline-primary mt-8 w-full" type="button" on:click={addStep}>
-		Add
-	</button>
+	{#if addBtnIsShown}
+		<button class="btn variant-outline-primary mt-8 w-full" type="button" on:click={addStep}>
+			Add
+		</button>
+	{/if}
 </section>

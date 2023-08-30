@@ -4,6 +4,7 @@
 	import { focus } from '$lib/utils';
 	import XIcon from '~icons/lucide/x';
 	import type { FormData } from '$lib/types';
+	import { MAX_NUMBER_INGREDIENTS } from '$lib/constants';
 
 	const { form, errors, constraints } = getContext<FormData>('formData');
 
@@ -15,6 +16,8 @@
 			$form.ingredients = $form.ingredients.filter((_, i) => i !== index);
 		};
 	}
+
+	$: addBtnIsShown = $form.ingredients.length < MAX_NUMBER_INGREDIENTS;
 
 	$: deleteIngredientBtnIsShown = $form.ingredients.length > 1;
 </script>
@@ -56,7 +59,9 @@
 			</div>
 		{/each}
 	</div>
-	<button class="btn variant-outline-primary mt-8 w-full" type="button" on:click={addIngredient}>
-		Add
-	</button>
+	{#if addBtnIsShown}
+		<button class="btn variant-outline-primary mt-8 w-full" type="button" on:click={addIngredient}>
+			Add
+		</button>
+	{/if}
 </section>
