@@ -22,7 +22,7 @@
 	$: {
 		recipesFetched = recipesFetched.concat(form?.recipes ?? []);
 	}
-	$: stopFetching = (form?.recipes.length ?? 0) < (form?.resultsPerPage ?? 0);
+	$: stopFetching = (form?.recipes?.length ?? 0) < (form?.resultsPerPage ?? 0);
 
 	const isLoading = writable(false);
 	setContext('isLoading', isLoading);
