@@ -9,20 +9,4 @@
 	export let data: PageData;
 </script>
 
-<RecipeForm
-	formProp={data.form}
-	actionUrl={$page.url.pathname}
-	onResult={async ({ result }) => {
-		if (result.type === 'error') {
-			toastStore.trigger({
-				message:
-					'Something went wrong while creating the recipe. Please try again or double-check your internet connection.'
-			});
-		}
-		applyAction(result);
-		toastStore.trigger({
-			message: 'Successfully created recipe!'
-		});
-		await goto('/app');
-	}}
-/>
+<RecipeForm formProp={data.form} actionUrl={$page.url.pathname} redirectUrl="/app" />
