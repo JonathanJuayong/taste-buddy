@@ -2,12 +2,13 @@
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 
 	export let isLoading: boolean;
+	export let btnClasses: string = '';
 	export let variantLoading: string = 'variant-outline-primary';
 	export let variantDefault: string = 'variant-filled-primary';
 </script>
 
 {#if isLoading}
-	<button class="btn variant-outline-primary w-full {variantLoading}" disabled>
+	<button class={`btn variant-outline-primary w-full ${variantLoading} ${btnClasses}`} disabled>
 		<slot />
 		<ProgressRadial
 			stroke={120}
@@ -18,7 +19,7 @@
 		/>
 	</button>
 {:else}
-	<button class="btn w-full {variantDefault}" on:click>
+	<button class={`btn w-full ${variantDefault} ${btnClasses}`} on:click>
 		<slot />
 		<slot name="button-icon" />
 	</button>
