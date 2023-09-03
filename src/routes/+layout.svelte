@@ -57,7 +57,7 @@
 	<ul class="space-y-5">
 		{#if id}
 			<li>
-				<a class="grid justify-center gap-2" href="/profile/{id}">
+				<a class="grid justify-center gap-2 text-center" href="/profile/{id}">
 					<CldImage
 						class="rounded-full"
 						alt={name}
