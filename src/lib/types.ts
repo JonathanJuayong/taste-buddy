@@ -10,6 +10,9 @@ export type RecipeCard = {
 
 export type User = {
 	id: string;
+	name: string;
+	bio: string;
+	profile_picture: string;
 };
 
 export type FormData = SuperForm<ZodValidation<typeof mainSchema>, unknown>;
