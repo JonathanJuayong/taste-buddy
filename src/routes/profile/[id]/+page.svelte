@@ -67,31 +67,29 @@
 	<title>{name} | Taste Buddy</title>
 </svelte:head>
 
-<div class="grid md:grid-cols-2 items-center gap-4 mb-4">
-	<section class="grid gap-4 place-items-center">
-		<CldImage
-			height=""
-			width="350"
-			alt={name}
-			aspectRatio={1}
-			src={profile_picture}
-			class="rounded-full"
-		/>
-		<div class="flex gap-2">
-			<h1 class="h1 text-center relative">{name}</h1>
-			{#if editable}
-				<a class="anchor" href="/app/profile">
-					<EditIcon />
-				</a>
-			{/if}
-		</div>
-	</section>
+<section class="grid gap-4 place-items-center">
+	<CldImage
+		height=""
+		width="350"
+		alt={name}
+		aspectRatio={1}
+		src={profile_picture}
+		class="rounded-full"
+	/>
+	<div class="flex gap-2">
+		<h1 class="h1 text-center relative">{name}</h1>
+		{#if editable}
+			<a class="anchor" href="/app/profile">
+				<EditIcon />
+			</a>
+		{/if}
+	</div>
+</section>
 
-	<section class="space-y-4">
-		<h2 class="uppercase font-bold text-secondary-500 opacity-50 text-sm">About Me</h2>
-		<p>{bio}</p>
-	</section>
-</div>
+<section class="space-y-4">
+	<h2 class="uppercase font-bold text-secondary-500 opacity-50 text-sm">About Me</h2>
+	<p>{bio}</p>
+</section>
 
 <section class="grid gap-4 relative">
 	<h2 class="uppercase font-bold text-secondary-500 opacity-50 text-sm">Recipes:</h2>
