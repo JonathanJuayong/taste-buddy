@@ -60,13 +60,13 @@
 				<a class="grid justify-center gap-2 text-center" href="/profile/{id}">
 					<CldImage
 						class="rounded-full"
-						alt={name}
+						alt={name ?? ''}
 						height=""
 						width="100"
 						aspectRatio={1}
 						src={profile_picture ?? ''}
 					/>
-					{name}
+					{name ?? ''}
 				</a>
 			</li>
 		{/if}
@@ -130,7 +130,7 @@
 							height=""
 							width="50"
 							aspectRatio={1}
-							src={profile_picture}
+							src={profile_picture ?? ''}
 						/>
 					</a>
 				</li>
