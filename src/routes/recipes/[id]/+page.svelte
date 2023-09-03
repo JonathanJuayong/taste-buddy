@@ -31,6 +31,17 @@
 						</a>
 					{/if}
 				</header>
+				<a class="flex items-center gap-4 anchor" href="/profile/{recipe.author_id}">
+					<CldImage
+						height=""
+						class="rounded-full"
+						width="40"
+						alt={recipe.username}
+						aspectRatio={1}
+						src={recipe.profile_picture}
+					/>
+					By {recipe.username}
+				</a>
 				<p>{recipe.description}</p>
 				<ul class="flex gap-4 text-xs">
 					<li class="border-r-[1px] pr-4">Serves: {recipe.serves}</li>
