@@ -55,11 +55,12 @@ export const getRecipesByNameByUserPaginated = async (
 	resultsPerPage: number,
 	lastSeenId: number
 ) => {
-	const string = `%${search}%`;
+	const authorIdString = `%${authorId}%`;
+	const searchString = `%${search}%`;
 	return await sql<MainSchema[]>`
     SELECT * FROM recipe_
-      WHERE author_id = ${authorId}
-        AND name ILIKE ${string}
+      WHERE author_id ILIKE ${authorIdString}
+        AND name ILIKE ${searchString}
         AND id < ${lastSeenId}
       ORDER BY id DESC
       FETCH FIRST ${resultsPerPage} ROWS ONLY
