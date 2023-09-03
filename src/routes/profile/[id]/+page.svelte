@@ -1,7 +1,7 @@
 <script lang="ts">
 	import RecipePreview from '$lib/components/RecipePreview.svelte';
 	import type { PageData } from './$types';
-
+	import EditIcon from '~icons/mdi/pencil';
 	import { CldImage } from 'svelte-cloudinary';
 	import type { MainSchema } from '$lib/formSchema';
 	import { tick } from 'svelte';
@@ -15,7 +15,8 @@
 	$: ({
 		user: { id: authorId, name, bio, profile_picture },
 		recipes,
-		resultsPerPage
+		resultsPerPage,
+		editable
 	} = data);
 
 	$: recipesShown = recipes as MainSchema[];
@@ -67,7 +68,7 @@
 </svelte:head>
 
 <div class="grid md:grid-cols-2 items-center gap-4 mb-4">
-	<section class="grid gap-4 justify-center">
+	<section class="grid gap-4 place-items-center">
 		<CldImage
 			height=""
 			width="350"
@@ -76,7 +77,14 @@
 			src={profile_picture}
 			class="rounded-full"
 		/>
-		<h1 class="h1 text-center">{name}</h1>
+		<div class="flex gap-2">
+			<h1 class="h1 text-center relative">{name}</h1>
+			{#if editable}
+				<a class="anchor" href="/app/profile">
+					<EditIcon />
+				</a>
+			{/if}
+		</div>
 	</section>
 
 	<section class="space-y-4">

@@ -2,7 +2,7 @@ import { getRecipesByNameByUserPaginated, getUserById } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from '../$types';
 
-export const load = (async ({ params }) => {
+export const load = (async ({ params, locals }) => {
 	const { id } = params;
 
 	const user = await getUserById(id);
@@ -15,5 +15,5 @@ export const load = (async ({ params }) => {
 	const recipeId = 1_000_000;
 	const recipes = await getRecipesByNameByUserPaginated(id, '', resultsPerPage, recipeId);
 
-	return { user, recipes, resultsPerPage };
+	return { user, recipes, resultsPerPage, editable: locals.user.uid === id };
 }) satisfies PageServerLoad;
