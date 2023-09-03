@@ -24,7 +24,7 @@
 				</a>
 			</li>
 		{/if}
-		{#if $page.url.pathname.includes('/recipes')}
+		{#if $page.url.pathname.includes('/myrecipes')}
 			<li class="crumb-separator">
 				{'>'}
 			</li>
@@ -37,7 +37,7 @@
 				{'>'}
 			</li>
 			<li class="crumb">
-				<a class="anchor" href="/app/recipes">Recipes</a>
+				<a class="anchor" href="/app/myrecipes">Recipes</a>
 			</li>
 			<li class="crumb-separator">
 				{'>'}
@@ -51,7 +51,7 @@
 				{'>'}
 			</li>
 			<li class="crumb">
-				<a class="anchor" href="/app/recipes">Recipes</a>
+				<a class="anchor" href="/app/myrecipes">Recipes</a>
 			</li>
 			<li class="crumb-separator">
 				{'>'}
