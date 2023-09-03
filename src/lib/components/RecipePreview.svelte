@@ -33,8 +33,8 @@
 			src={image_src}
 		/>
 	</header>
-	<article>
-		<section class="p-10">
+	<article class="grid">
+		<section class="p-10 h-60">
 			<h3 class="h3 font-extrabold mb-4">{name}</h3>
 			<p>{truncateText(description, 80)}</p>
 		</section>
