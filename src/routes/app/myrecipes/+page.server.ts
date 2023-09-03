@@ -1,8 +1,8 @@
 import { getRecipesByNameByUserPaginated } from '$lib/server/db';
 import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
 import { createTemporaryRedirectCookie } from '$lib/server/helpers';
 import type { MainSchema } from '$lib/formSchema';
+import type { PageServerLoad } from './$types.js';
 
 const resultsPerPage = 20;
 const lastSeenId = 1_000_000;
