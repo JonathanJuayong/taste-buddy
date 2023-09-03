@@ -44,7 +44,31 @@ export const getRecipesPaginated = async (resultsPerPage: number, lastSeenId: nu
 
 export const getAllUsers = async () => await sql`SELECT * FROM user_;`;
 
-export const createUser = async (id: string) => await sql`INSERT INTO user_ (id) VALUES (${id})`;
+export const createUser = async (
+	id: string,
+	name: string | null = 'Anonymous-User-' + id.slice(0, 5),
+	bio: string | null = '',
+	profile_picture: string | null = ''
+) => {
+	await sql`
+    INSERT INTO user_ (id, name, bio, profile_picture) 
+    VALUES (${id}, ${name}, ${bio}, ${profile_picture})`;
+};
+
+export const updateUser = async (
+	id: string,
+	name: string,
+	bio: string,
+	profile_picture: string
+) => {
+	await sql`
+    UPDATE user_
+    SET name = ${name},
+        bio = ${bio},
+        profile_picture = ${profile_picture}
+    WHERE id = ${id}
+  `;
+};
 
 export const getRecipesByUser = async (id: string) =>
 	await sql<MainSchema[]>`SELECT * FROM recipe_ WHERE author_id = ${id}`;
