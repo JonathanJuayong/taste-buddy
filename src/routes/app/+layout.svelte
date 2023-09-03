@@ -24,7 +24,21 @@
 				</a>
 			</li>
 		{/if}
+		{#if $page.url.pathname.includes('/recipes')}
+			<li class="crumb-separator">
+				{'>'}
+			</li>
+			<li class="crumb">
+				<p>Recipes</p>
+			</li>
+		{/if}
 		{#if $page.url.pathname.includes('/create')}
+			<li class="crumb-separator">
+				{'>'}
+			</li>
+			<li class="crumb">
+				<a class="anchor" href="/app/recipes">Recipes</a>
+			</li>
 			<li class="crumb-separator">
 				{'>'}
 			</li>
@@ -37,7 +51,21 @@
 				{'>'}
 			</li>
 			<li class="crumb">
-				<p>Recipe</p>
+				<a class="anchor" href="/app/recipes">Recipes</a>
+			</li>
+			<li class="crumb-separator">
+				{'>'}
+			</li>
+			<li class="crumb">
+				<p>Edit</p>
+			</li>
+		{/if}
+		{#if $page.url.pathname.includes('/profile')}
+			<li class="crumb-separator">
+				{'>'}
+			</li>
+			<li class="crumb">
+				<p>Edit</p>
 			</li>
 		{/if}
 		<li />
