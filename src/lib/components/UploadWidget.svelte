@@ -7,6 +7,10 @@
 	let files: FileList;
 	let Preview: HTMLImageElement | null = null;
 	let error: string | null;
+
+	export let rounded = false;
+	export let width = 900;
+	export let aspectRatio = 16 / 9;
 	export let imageSrc: string | null = null;
 
 	const dispatch = createEventDispatcher();
@@ -36,11 +40,11 @@
 
 	{#if !Preview}
 		<CldImage
-			class="mb-4"
+			class="mb-4 mx-auto {rounded ? 'rounded-full' : ''}"
 			height=""
-			width="900"
+			{width}
 			alt="preview"
-			aspectRatio={16 / 9}
+			{aspectRatio}
 			src={imageSrc ?? ''}
 		/>
 	{/if}
