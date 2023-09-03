@@ -69,8 +69,28 @@ export const getRecipesByNameByUserPaginated = async (
 
 export const getRecipeById = async (
 	id: number
-): Promise<(MainSchema & { author_id: string }) | null> => {
-	const result = await sql<RecipeSQLReturnType[]>`SELECT * FROM recipe_ WHERE id = ${id};`;
+): Promise<
+	(MainSchema & { author_id: string; username: string; profile_picture: string }) | null
+> => {
+	const result = await sql<
+		(RecipeSQLReturnType & { author_id: string; username: string; profile_picture: string })[]
+	>`
+  SELECT
+    r.name,
+    r.description,
+    r.image_src,
+    r.serves,
+    r.cook_time,
+    r.prep_time,
+    r.ingredients,
+    r.steps,
+    r.author_id,
+    u.name AS username,
+    u.profile_picture
+  FROM recipe_ r 
+  INNER JOIN user_ u 
+    ON r.author_id = u.id
+  WHERE r.id = ${id};`;
 
 	if (result.length === 0) return null;
 
