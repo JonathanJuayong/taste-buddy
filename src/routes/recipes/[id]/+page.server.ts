@@ -1,5 +1,5 @@
 import type { PageServerLoad } from '../$types';
-import { getRecipeById, getRecipesByUser } from '$lib/server/db';
+import { getRecipeById } from '$lib/server/db';
 
 export const load = (async ({ locals, params }) => {
 	const { id } = params;
