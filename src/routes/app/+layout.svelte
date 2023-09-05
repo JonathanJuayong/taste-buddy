@@ -68,6 +68,14 @@
 				<p>Edit</p>
 			</li>
 		{/if}
+		{#if $page.url.pathname.includes('/likes')}
+			<li class="crumb-separator">
+				{'>'}
+			</li>
+			<li class="crumb">
+				<p>Likes</p>
+			</li>
+		{/if}
 		<li />
 	</ul>
 	<slot />
