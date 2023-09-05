@@ -1,6 +1,12 @@
 import type { MainSchema } from '$lib/formSchema';
 import postgres from 'postgres';
-import { PG_DATABASE, PG_HOST, PG_PASSWORD, PG_USERNAME } from '$env/static/private';
+import {
+	PG_DATABASE,
+	PG_HOST,
+	PG_PASSWORD,
+	PG_USERNAME,
+	NEON_CONNECTION_STRING_V1
+} from '$env/static/private';
 import type { User } from '$lib/types';
 
 function generateRandomId() {
@@ -13,13 +19,15 @@ export type Ingredient = {
 	item: string;
 };
 
-const sql = postgres({
-	username: PG_USERNAME,
-	password: PG_PASSWORD,
-	host: PG_HOST,
-	port: 5432,
-	database: PG_DATABASE
-});
+// const sql = postgres({
+// 	username: PG_USERNAME,
+// 	password: PG_PASSWORD,
+// 	host: PG_HOST,
+// 	port: 5432,
+// 	database: PG_DATABASE
+// });
+
+const sql = postgres(NEON_CONNECTION_STRING_V1, { ssl: 'require' });
 
 type RecipeSQLReturnType = Omit<MainSchema, 'ingredients' | 'steps'> & {
 	ingredients: string[];
@@ -100,6 +108,7 @@ export const getRecipeById = async (
 		(RecipeSQLReturnType & { author_id: string; username: string; profile_picture: string })[]
 	>`
   SELECT
+    r.id,
     r.name,
     r.description,
     r.image_src,
