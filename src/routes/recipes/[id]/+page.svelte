@@ -39,7 +39,7 @@
 					<form method="post" use:enhance>
 						{#if recipeIsLiked}
 							<button formaction="{$page.url.pathname}?/unlike" class="btn variant-filled-error">
-								Like <HeartIconFilled class="ml-2 text-white" />
+								Unlike <HeartIconFilled class="ml-2 text-white" />
 							</button>
 						{:else}
 							<button formaction="{$page.url.pathname}?/like" class="btn variant-outline-error">
