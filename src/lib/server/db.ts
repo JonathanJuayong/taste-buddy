@@ -192,3 +192,45 @@ export const searchRecipesByNamePaginated = async (
       FETCH FIRST ${resultsPerPage} ROWS ONLY
     `;
 };
+
+export const createLike = async (recipeId: number, userId: string): Promise<'Success' | 'Fail'> => {
+	try {
+		await sql`INSERT INTO likes_ (recipe_id, user_id) VALUES (${recipeId}, ${userId})`;
+		return 'Success';
+	} catch (error) {
+		console.log(error);
+		return 'Fail';
+	}
+};
+
+export const deleteLike = async (recipeId: number, userId: string): Promise<'Success' | 'Fail'> => {
+	try {
+		await sql`DELETE FROM likes_ WHERE recipe_id = ${recipeId} AND user_id = ${userId}`;
+		return 'Success';
+	} catch (error) {
+		console.log(error);
+		return 'Fail';
+	}
+};
+
+export const isLiked = async (recipeId: number, userId: string): Promise<boolean> => {
+	const data =
+		await sql`SELECT * FROM likes_ WHERE recipe_id = ${recipeId} AND user_id = ${userId}`;
+	return data.length > 0;
+};
+
+export const findLikedRecipesPaginated = async (
+	userId: string,
+	resultsPerPage: number,
+	lastSeenId: number
+) => {
+	return await sql<RecipeSQLReturnType[]>`
+    SELECT * FROM recipe_ r 
+    INNER JOIN likes_ l 
+      ON r.id = l.recipe_id
+    WHERE l.user_id = ${userId}
+      AND r.id < ${lastSeenId}
+    ORDER BY r.id DESC
+    FETCH FIRST ${resultsPerPage} ROWS ONLY
+    `;
+};
