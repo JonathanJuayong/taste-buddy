@@ -1,5 +1,7 @@
 import type { PageServerLoad } from '../$types';
-import { getRecipeById } from '$lib/server/db';
+import { createLike, deleteLike, getRecipeById, isLiked } from '$lib/server/db';
+import { error } from '@sveltejs/kit';
+import { invalidateAll } from '$app/navigation';
 
 export const load = (async ({ locals, params }) => {
 	const { id } = params;
@@ -7,12 +9,49 @@ export const load = (async ({ locals, params }) => {
 	const typeCheckedId = isNaN(Number(id)) ? -1 : Number(id);
 	const recipe = await getRecipeById(typeCheckedId);
 
+	const {
+		user: { uid }
+	} = locals;
+
+	const recipeIsLiked = await isLiked(Number(id), uid ?? '');
+
 	if (recipe) {
 		return {
 			recipe,
 			// if user uid is the same as author_id, allow edit
-			editable: locals.user.uid === recipe.author_id
+			editable: uid === recipe.author_id,
+			recipeIsLiked,
+			uid
 		};
 	}
-	return { recipe };
+	return { recipe, editable: false, recipeIsLiked, uid };
 }) satisfies PageServerLoad;
+
+export const actions = {
+	async like({ locals, params }) {
+		const {
+			user: { uid }
+		} = locals;
+
+		if (!uid) {
+			throw error(401, 'uid cannot be null');
+		}
+
+		const { id } = params;
+
+		await createLike(Number(id), uid);
+	},
+	async unlike({ locals, params }) {
+		const {
+			user: { uid }
+		} = locals;
+
+		if (!uid) {
+			throw error(401, 'uid cannot be null');
+		}
+
+		const { id } = params;
+
+		await deleteLike(Number(id), uid);
+	}
+};
