@@ -20,11 +20,12 @@
 	import TwitterIcon from '~icons/mdi/twitter';
 	import InstagramIcon from '~icons/mdi/instagram';
 	import { page } from '$app/stores';
+	import { CldImage } from 'svelte-cloudinary';
 
 	export let data: LayoutData;
 
 	$: ({
-		user: { uid }
+		profile: { id, profile_picture, name }
 	} = data);
 
 	const drawerSettings: DrawerSettings = {
@@ -39,7 +40,7 @@
 	$: navLinks = [
 		{ label: 'App', href: '/app' },
 		{ label: 'Recipes', href: '/recipes' },
-		{ label: uid ? 'Sign out' : 'Sign in', href: '/signin' }
+		{ label: id ? 'Sign out' : 'Sign in', href: '/signin' }
 	];
 </script>
 
@@ -54,6 +55,21 @@
 	}}
 >
 	<ul class="space-y-5">
+		{#if id}
+			<li>
+				<a class="grid justify-center gap-2 text-center" href="/profile/{id}">
+					<CldImage
+						class="rounded-full"
+						alt={name ?? ''}
+						height=""
+						width="100"
+						aspectRatio={1}
+						src={profile_picture ?? ''}
+					/>
+					{name ?? ''}
+				</a>
+			</li>
+		{/if}
 		{#each navLinks as { label, href }}
 			<li>
 				<a
@@ -66,7 +82,7 @@
 				</a>
 			</li>
 		{/each}
-		{#if uid}
+		{#if id}
 			<li>
 				<a class="text-2xl" href="/app/create">Create</a>
 			</li>
@@ -102,9 +118,21 @@
 					{label}
 				</a>
 			{/each}
-			{#if uid}
+			{#if id}
 				<li class="variant-outline-primary btn btn-sm">
 					<a class="text-primary-700" href="/app/create"> Create </a>
+				</li>
+				<li>
+					<a class="grid justify-center gap-2" href="/profile/{id}">
+						<CldImage
+							class="rounded-full"
+							alt={name}
+							height=""
+							width="50"
+							aspectRatio={1}
+							src={profile_picture ?? ''}
+						/>
+					</a>
 				</li>
 			{/if}
 		</ul>

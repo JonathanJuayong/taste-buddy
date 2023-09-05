@@ -63,3 +63,11 @@ export const mainSchema = z.object({
 });
 
 export type MainSchema = z.infer<typeof mainSchema>;
+
+export const userSchema = z.object({
+	name: z.string(),
+	bio: z.string(),
+	profile_picture: z.string()
+});
+
+export type UserSchema = z.infer<typeof userSchema>;

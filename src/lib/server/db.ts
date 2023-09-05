@@ -44,7 +44,31 @@ export const getRecipesPaginated = async (resultsPerPage: number, lastSeenId: nu
 
 export const getAllUsers = async () => await sql`SELECT * FROM user_;`;
 
-export const createUser = async (id: string) => await sql`INSERT INTO user_ (id) VALUES (${id})`;
+export const createUser = async (
+	id: string,
+	name: string | null = 'Anonymous-User-' + id.slice(0, 5),
+	bio: string | null = '',
+	profile_picture: string | null = ''
+) => {
+	await sql`
+    INSERT INTO user_ (id, name, bio, profile_picture) 
+    VALUES (${id}, ${name}, ${bio}, ${profile_picture})`;
+};
+
+export const updateUser = async (
+	id: string,
+	name: string,
+	bio: string,
+	profile_picture: string
+) => {
+	await sql`
+    UPDATE user_
+    SET name = ${name},
+        bio = ${bio},
+        profile_picture = ${profile_picture}
+    WHERE id = ${id}
+  `;
+};
 
 export const getRecipesByUser = async (id: string) =>
 	await sql<MainSchema[]>`SELECT * FROM recipe_ WHERE author_id = ${id}`;
@@ -55,11 +79,12 @@ export const getRecipesByNameByUserPaginated = async (
 	resultsPerPage: number,
 	lastSeenId: number
 ) => {
-	const string = `%${search}%`;
+	const authorIdString = `%${authorId}%`;
+	const searchString = `%${search}%`;
 	return await sql<MainSchema[]>`
     SELECT * FROM recipe_
-      WHERE author_id = ${authorId}
-        AND name ILIKE ${string}
+      WHERE author_id ILIKE ${authorIdString}
+        AND name ILIKE ${searchString}
         AND id < ${lastSeenId}
       ORDER BY id DESC
       FETCH FIRST ${resultsPerPage} ROWS ONLY
@@ -68,8 +93,28 @@ export const getRecipesByNameByUserPaginated = async (
 
 export const getRecipeById = async (
 	id: number
-): Promise<(MainSchema & { author_id: string }) | null> => {
-	const result = await sql<RecipeSQLReturnType[]>`SELECT * FROM recipe_ WHERE id = ${id};`;
+): Promise<
+	(MainSchema & { author_id: string; username: string; profile_picture: string }) | null
+> => {
+	const result = await sql<
+		(RecipeSQLReturnType & { author_id: string; username: string; profile_picture: string })[]
+	>`
+  SELECT
+    r.name,
+    r.description,
+    r.image_src,
+    r.serves,
+    r.cook_time,
+    r.prep_time,
+    r.ingredients,
+    r.steps,
+    r.author_id,
+    u.name AS username,
+    u.profile_picture
+  FROM recipe_ r 
+  INNER JOIN user_ u 
+    ON r.author_id = u.id
+  WHERE r.id = ${id};`;
 
 	if (result.length === 0) return null;
 
@@ -145,5 +190,47 @@ export const searchRecipesByNamePaginated = async (
         AND name ILIKE ${string} 
       ORDER BY id DESC 
       FETCH FIRST ${resultsPerPage} ROWS ONLY
+    `;
+};
+
+export const createLike = async (recipeId: number, userId: string): Promise<'Success' | 'Fail'> => {
+	try {
+		await sql`INSERT INTO likes_ (recipe_id, user_id) VALUES (${recipeId}, ${userId})`;
+		return 'Success';
+	} catch (error) {
+		console.log(error);
+		return 'Fail';
+	}
+};
+
+export const deleteLike = async (recipeId: number, userId: string): Promise<'Success' | 'Fail'> => {
+	try {
+		await sql`DELETE FROM likes_ WHERE recipe_id = ${recipeId} AND user_id = ${userId}`;
+		return 'Success';
+	} catch (error) {
+		console.log(error);
+		return 'Fail';
+	}
+};
+
+export const isLiked = async (recipeId: number, userId: string): Promise<boolean> => {
+	const data =
+		await sql`SELECT * FROM likes_ WHERE recipe_id = ${recipeId} AND user_id = ${userId}`;
+	return data.length > 0;
+};
+
+export const findLikedRecipesPaginated = async (
+	userId: string,
+	resultsPerPage: number,
+	lastSeenId: number
+) => {
+	return await sql<RecipeSQLReturnType[]>`
+    SELECT * FROM recipe_ r 
+    INNER JOIN likes_ l 
+      ON r.id = l.recipe_id
+    WHERE l.user_id = ${userId}
+      AND r.id < ${lastSeenId}
+    ORDER BY r.id DESC
+    FETCH FIRST ${resultsPerPage} ROWS ONLY
     `;
 };

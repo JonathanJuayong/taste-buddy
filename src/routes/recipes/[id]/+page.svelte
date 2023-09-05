@@ -2,9 +2,13 @@
 	import { CldImage } from 'svelte-cloudinary';
 	import type { PageData } from '../$types';
 	import EditIcon from '~icons/mdi/pencil';
+	import HeartIconOutline from '~icons/mdi/cards-heart-outline';
+	import HeartIconFilled from '~icons/mdi/cards-heart';
+	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
 
 	export let data: PageData;
-	const { recipe, editable } = data;
+	$: ({ recipe, editable, recipeIsLiked, uid } = data);
 </script>
 
 <svelte:head>
@@ -31,6 +35,30 @@
 						</a>
 					{/if}
 				</header>
+				{#if uid}
+					<form method="post" use:enhance>
+						{#if recipeIsLiked}
+							<button formaction="{$page.url.pathname}?/unlike" class="btn variant-filled-error">
+								Like <HeartIconFilled class="ml-2 text-white" />
+							</button>
+						{:else}
+							<button formaction="{$page.url.pathname}?/like" class="btn variant-outline-error">
+								Like <HeartIconOutline class="ml-2" />
+							</button>
+						{/if}
+					</form>
+				{/if}
+				<a class="flex items-center gap-4 anchor" href="/profile/{recipe.author_id}">
+					<CldImage
+						height=""
+						class="rounded-full"
+						width="40"
+						alt={recipe.username}
+						aspectRatio={1}
+						src={recipe.profile_picture}
+					/>
+					By {recipe.username}
+				</a>
 				<p>{recipe.description}</p>
 				<ul class="flex gap-4 text-xs">
 					<li class="border-r-[1px] pr-4">Serves: {recipe.serves}</li>

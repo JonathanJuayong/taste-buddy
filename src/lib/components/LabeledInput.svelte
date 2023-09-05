@@ -3,7 +3,7 @@
 	export let label: string = name;
 	export let error: string[] | undefined;
 	export let value: any;
-	export let type: 'text' | 'number';
+	export let type: 'text' | 'number' | 'textarea';
 </script>
 
 <label>
@@ -24,6 +24,15 @@
 			class="input"
 			{name}
 			type="number"
+			aria-invalid={error ? 'true' : undefined}
+			bind:value
+			{...$$restProps}
+		/>
+	{:else if type === 'textarea'}
+		<textarea
+			class="textarea resize-none"
+			rows="10"
+			{name}
 			aria-invalid={error ? 'true' : undefined}
 			bind:value
 			{...$$restProps}
