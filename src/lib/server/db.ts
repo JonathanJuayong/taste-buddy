@@ -1,12 +1,6 @@
 import type { MainSchema } from '$lib/formSchema';
 import postgres from 'postgres';
-import {
-	PG_DATABASE,
-	PG_HOST,
-	PG_PASSWORD,
-	PG_USERNAME,
-	NEON_CONNECTION_STRING_V1
-} from '$env/static/private';
+import { NEON_CONNECTION_STRING_V1 } from '$env/static/private';
 import type { User } from '$lib/types';
 
 function generateRandomId() {
@@ -18,14 +12,6 @@ export type Ingredient = {
 	unit: string;
 	item: string;
 };
-
-// const sql = postgres({
-// 	username: PG_USERNAME,
-// 	password: PG_PASSWORD,
-// 	host: PG_HOST,
-// 	port: 5432,
-// 	database: PG_DATABASE
-// });
 
 const sql = postgres(NEON_CONNECTION_STRING_V1, { ssl: 'require' });
 
