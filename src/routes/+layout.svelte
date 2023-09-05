@@ -59,7 +59,7 @@
 			<li>
 				<a class="grid justify-center gap-2 text-center" href="/profile/{id}">
 					<CldImage
-						class="rounded-full"
+						class="rounded-full mx-auto"
 						alt={name ?? ''}
 						height=""
 						width="100"
