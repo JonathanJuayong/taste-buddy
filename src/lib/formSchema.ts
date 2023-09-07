@@ -13,7 +13,9 @@ import {
 	MAX_NUMBER_COOK_TIME,
 	MAX_NUMBER_PREP_TIME,
 	MAX_NUMBER_INGREDIENTS,
-	MAX_NUMBER_STEPS
+	MAX_NUMBER_STEPS,
+	MAX_NAME_LENGTH,
+	MAX_BIO_LENGTH
 } from '$lib/constants';
 
 const ingredient = z.object({
@@ -65,8 +67,8 @@ export const mainSchema = z.object({
 export type MainSchema = z.infer<typeof mainSchema>;
 
 export const userSchema = z.object({
-	name: z.string(),
-	bio: z.string(),
+	name: z.string().max(MAX_NAME_LENGTH),
+	bio: z.string().max(MAX_BIO_LENGTH),
 	profile_picture: z.string()
 });
 

@@ -21,3 +21,6 @@ export const MAX_NUMBER_PREP_TIME = 1_000;
 
 export const MAX_NUMBER_INGREDIENTS = 100;
 export const MAX_NUMBER_STEPS = 100;
+
+export const MAX_NAME_LENGTH = 100;
+export const MAX_BIO_LENGTH = 1_000;
