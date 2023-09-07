@@ -11,5 +11,8 @@ export default defineConfig({
 			compiler: 'svelte',
 			autoInstall: true
 		})
-	]
+	],
+	build: {
+		target: 'esnext'
+	}
 });
