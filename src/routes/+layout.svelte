@@ -102,7 +102,7 @@
 			<MenuIcon />
 		</button>
 	</svelte:fragment>
-	<p class="font-extrabold">Taste Buddy</p>
+	<a href="/" class="font-extrabold">Taste Buddy</a>
 </AppBar>
 
 <div class="px-6 max-w-4xl mx-auto min-h-screen">
@@ -141,7 +141,7 @@
 </div>
 <footer class="mt-5 py-20 bg-surface-800">
 	<div class="max-w-4xl mx-auto flex flex-col items-center gap-10">
-		<p class="font-extrabold">Taste Buddy</p>
+		<a href="/" class="font-extrabold">Taste Buddy</a>
 		<ul class="flex gap-4 justify-center">
 			<li><button class="btn-icon variant-outline-surface"><FacebookIcon /></button></li>
 			<li><button class="btn-icon variant-outline-surface"><TwitterIcon /></button></li>
