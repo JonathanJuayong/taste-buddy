@@ -14,7 +14,7 @@ export const load = (async ({ locals, cookies, url }) => {
 
 	if (!uid) {
 		createTemporaryRedirectCookie(cookies);
-		throw redirect(302, '/signin');
+		throw redirect(301, '/signin');
 	}
 
 	const params = url.searchParams;

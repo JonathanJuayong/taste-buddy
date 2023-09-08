@@ -8,7 +8,7 @@ import { createTemporaryRedirectCookie } from '$lib/server/helpers';
 export const load = (async ({ params, locals, cookies }) => {
 	if (!locals.user.uid) {
 		createTemporaryRedirectCookie(cookies);
-		throw redirect(302, '/signin');
+		throw redirect(301, '/signin');
 	}
 
 	const { id } = params;

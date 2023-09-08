@@ -52,5 +52,5 @@ export const DELETE = async ({ request, fetch }) => {
 		console.log(e);
 	}
 
-	throw redirect(302, '/app');
+	throw redirect(301, '/app');
 };
