@@ -10,11 +10,6 @@ export const load = (async ({ locals, cookies }) => {
 		user: { uid }
 	} = locals;
 
-	if (!uid) {
-		createTemporaryRedirectCookie(cookies);
-		throw redirect(301, '/signin');
-	}
-
 	const user = await getUserById(uid);
 	const form = await superValidate(user, userSchema);
 
