@@ -6,11 +6,6 @@ import { error, redirect } from '@sveltejs/kit';
 import { createTemporaryRedirectCookie } from '$lib/server/helpers';
 
 export const load = (async ({ params, locals, cookies }) => {
-	if (!locals.user.uid) {
-		createTemporaryRedirectCookie(cookies);
-		throw redirect(302, '/signin');
-	}
-
 	const { id } = params;
 
 	// avoid isNan errors by coercing id into number

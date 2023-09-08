@@ -13,10 +13,18 @@
 	<title>Taste Buddy</title>
 </svelte:head>
 
-<main class="grid justify-center text-center gap-4">
-	<div class="flex gap-4 justify-center">
+<main class="grid justify-center max-w-4xl mx-auto text-center gap-4">
+	<div class="flex gap-4 justify-center max-w-4xl mx-auto overflow-clip">
 		{#each images as src}
-			<CldImage width="900" height="1000" {src} />
+			<CldImage
+				layout="constrained"
+				alt="background image of food"
+				width="500"
+				quality="100"
+				height=""
+				aspectRatio={1}
+				{src}
+			/>
 		{/each}
 	</div>
 	<h1 class="h1">Welcome to Taste Buddy!</h1>

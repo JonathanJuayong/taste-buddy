@@ -56,6 +56,8 @@
 	{/if}
 
 	<FileButton
+		accept="image/*"
+		type="file"
 		button="variant-outline-secondary w-full"
 		name="file"
 		bind:files
