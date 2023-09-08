@@ -19,7 +19,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			await fs.mkdirs(directory);
 			await fs.appendFile(filePath, Buffer.from(arrayBuffer));
 
-			const result = await cld.uploader.upload(filePath, {});
+			const result = await cld.uploader.upload(filePath);
 
 			return json({
 				public_id: result.public_id

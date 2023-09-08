@@ -12,16 +12,11 @@ export const load = (async ({ locals, cookies, url }) => {
 		user: { uid }
 	} = locals;
 
-	if (!uid) {
-		createTemporaryRedirectCookie(cookies);
-		throw redirect(302, '/signin');
-	}
-
 	const params = url.searchParams;
 	const search = params.get('search') ?? '';
 
 	const recipes: MainSchema[] = await getRecipesByNameByUserPaginated(
-		uid,
+		uid ?? '',
 		search,
 		resultsPerPage,
 		lastSeenId

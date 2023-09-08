@@ -6,11 +6,6 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { createTemporaryRedirectCookie } from '$lib/server/helpers';
 
 export const load = (async ({ locals, cookies }) => {
-	if (!locals.user.uid) {
-		createTemporaryRedirectCookie(cookies);
-		throw redirect(302, '/signin');
-	}
-
 	const form = await superValidate(mainSchema);
 	return { form };
 }) satisfies PageServerLoad;
